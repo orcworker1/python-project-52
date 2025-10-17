@@ -7,3 +7,7 @@ render-start:
 
 install:
 	uv sync
+
+
+dev:
+	python manage.py runserver
