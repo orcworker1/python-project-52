@@ -1,11 +1,10 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap demo</title>
-  </head>
-  <body>
-    <h1>123</h1>
-  </body>
-</html>
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+
+<h1>Добро пожаловать в менеджер задач!</h1>
+
+<p>это домашняя страница</p>
+
+{% endblock %}

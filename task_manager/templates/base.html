@@ -1,0 +1,36 @@
+{% load django_bootstrap5 %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {% bootstrap_css %}
+  <title>{% block title %}Менеджер задач{% endblock %}</title>
+</head>
+<body>
+
+<nav class="navbar" style="background-color: #e3f2fd;" data-bs-theme="light">
+  <ul class="nav justify-content-end">
+    <li class="nav-item">
+      <a class="nav-link active" aria-current="page" href="#">Менеджер задач</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">Вход</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">Регистрация</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">Пользователи</a>
+    </li>
+  </ul>
+</nav>
+
+<div class="container mt-4">
+  {% block content %}
+  {% endblock %}
+</div>
+
+{% bootstrap_javascript %}
+</body>
+</html>
