@@ -1,0 +1,12 @@
+.venv
+
+.idea/
+
+.python-version
+
+.venv/
+env/
+.env
+hexlet_code.egg-info
+.DS_Store
+__pycache__/
