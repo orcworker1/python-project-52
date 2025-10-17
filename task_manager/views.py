@@ -6,3 +6,9 @@ def index(request):
         request,
         "index.html",
     )
+
+def login(request):
+    return render(
+        request,
+        "users/login.html"
+    )
