@@ -15,6 +15,11 @@ class CreateUser(CreateView):
     fields = ['name','last_name','user_name','password']
     success_url = reverse_lazy('user_list')
 
+class UserLoginView(LoginView):
+    template_name = 'users/login.html'
+    redirect_authenticated_user = True
+
+
 
 
 

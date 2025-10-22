@@ -7,8 +7,5 @@ def index(request):
         "index.html",
     )
 
-def login(request):
-    return render(
-        request,
-        "users/login.html"
-    )
+
+

@@ -1,8 +1,12 @@
 from django.urls import path
-from task_manager import views
+from .views import (
+    ViewUsers,
+    CreateUser
+)
 
 
 urlpatterns = [
-    path('', views.index, name='/'),
-    path('login/',views.login, name='login'),
+    path('', ViewUsers.as_view(), name='/'),
+    path('create/', CreateUser.as_view(), name='create')
+
 ]
