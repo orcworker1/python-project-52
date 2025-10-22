@@ -6,7 +6,7 @@ from .views import (
 
 
 urlpatterns = [
-    path('', ViewUsers.as_view(), name='/'),
+    path('', ViewUsers.as_view(), name='users'),
     path('create/', CreateUser.as_view(), name='create')
 
 ]

@@ -60,9 +60,11 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'task_manager.urls'
 
 
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/login/'
-LOGIN_URL = '/login/'
+
+LOGIN_REDIRECT_URL = 'index'
+LOGOUT_REDIRECT_URL = 'login'
+LOGIN_URL = 'login'
+
 
 
 TEMPLATES = [

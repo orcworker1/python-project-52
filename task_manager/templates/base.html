@@ -12,20 +12,25 @@
 <nav class="navbar" style="background-color: #e3f2fd;" data-bs-theme="light">
   <ul class="nav justify-content-end">
     <li class="nav-item">
-      <a class="nav-link active" aria-current="page" href="{% url '/' %}">Менеджер задач</a>
+      <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Менеджер задач</a>
     </li>
+    {% if user.is_authenticated %}
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'logout' %}">Выход</a>
+    </li>
+    {% else %}
     <li class="nav-item">
       <a class="nav-link" href="{% url 'login' %}">Вход</a>
     </li>
     <li class="nav-item">
       <a class="nav-link" href="#">Регистрация</a>
     </li>
+    {% endif %}
     <li class="nav-item">
-      <a class="nav-link" href="#">Пользователи</a>
+      <a class="nav-link" href="{url 'users'}">Пользователи</a>
     </li>
   </ul>
 </nav>
-
 <div class="container mt-4">
   {% block content %}
   {% endblock %}

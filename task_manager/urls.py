@@ -18,12 +18,14 @@ from tkinter.font import names
 
 from django.contrib import admin
 from django.urls import path
+from django.contrib.auth.views import LogoutView
 from . import views
-from .users .views import LoginView , UserLoginView
+from .users.views import UserLoginView, UserLogoutView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.index, name='/'),
-    path('login/', LoginView.as_view(), name='login'),
+    path('', views.index, name='index'),
+    path('login/', UserLoginView.as_view(), name='login'),
+    path('logout/', UserLogoutView.as_view(next_page='login'), name='logout'),
 
 ]
