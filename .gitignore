@@ -3,7 +3,7 @@
 .idea/
 
 .python-version
-
+test.html
 .venv/
 env/
 .env
@@ -11,3 +11,4 @@ hexlet_code.egg-info
 .DS_Store
 __pycache__/
 main.py
+task_manager/templates/users/test.html
