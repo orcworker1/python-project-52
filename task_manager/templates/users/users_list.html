@@ -4,7 +4,7 @@
 
 <h1>Пользователи</h1>
 
-<table class="table">
+<table class="table table-striped">
     <thead>
     <tr>
     <th>id</th>
@@ -21,9 +21,9 @@
       <td>{{ user.username }}</td>
       <td>{{ user.first_name }} {{ user.last_name }}</td>
       <td>{{ user.date_joined|date:"d.m.Y" }}</td>
-        <td class="action">
-            <a href="#">Удалить</a>
-            <a href="#">Изменить</a>
+        <td class=''>
+            <a class="btn btn-primary" href="#" role="button">Удалить</a>
+            <a class="btn btn-primary" href="{% url 'update' user.id %}" role="button">Изменить</a>
         </td>
     </tr>
     {% endfor %}
