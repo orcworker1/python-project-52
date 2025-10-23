@@ -1,13 +1,24 @@
 {% extends "base.html" %}
 {% load django_bootstrap5 %}
+{% load static %}
 
 {% block content %}
-<div style="background-image: url('image/image1.jpg');">
-    Содержимое элемента
+
+<div class="hero-section" style="background: linear-gradient(135deg, rgba(0,123,255,0.8), rgba(0,200,255,0.6)), url('{% static "image1.jpg" %}'); background-size: cover; background-position: center; min-height: 70vh; display: flex; align-items: center;">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="hero-content text-white">
+                    <h1 class="display-3 fw-bold mb-4">Task Manager</h1>
+                    <p class="fs-4 mb-4">Простое и эффективное управление задачами</p>
+                    <div class="d-flex gap-3">
+                        <a href="{% url 'users' %}" class="btn btn-light btn-lg px-4">Начать работу</a>
+                        <a href="{% url 'login' %}" class="btn btn-outline-light btn-lg px-4">Войти</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<h1>Добро пожаловать в менеджер задач!</h1>
-
-<p>это домашняя страница</p>
-
 
 {% endblock %}
