@@ -14,8 +14,8 @@ class ViewUsers(ListView):
 
 class CreateUser(CreateView):
     model = User
-    form_class = CustomUserForm
     template_name = 'users/create.html'
+    form_class = CustomUserForm
     success_url = reverse_lazy('login')
     def form_valid(self, form):
         response = super().form_valid(form)
@@ -40,6 +40,15 @@ class UserLogoutView(LogoutView):
 
     def get_next_page(self):
         return reverse_lazy('login')
+
+class UserDelete(DeleteView):
+    model = User
+    template_name = 'users/delete_user.html'
+    success_url = reverse_lazy('users')
+    
+    def post(self, request, *args, **kwargs):
+        messages.success(request, 'Пользователь успешно удалён')
+        return super().post(request, *args, **kwargs)
 
 
 class UserUpdate(UpdateView):
