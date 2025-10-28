@@ -22,6 +22,7 @@ class CreateUser(CreateView):
         messages.success(self.request, 'Пользователь успешно зарегистрирован')
         return response
 
+
 class UserLoginView(LoginView):
     template_name = 'users/login.html'
     redirect_authenticated_user = True

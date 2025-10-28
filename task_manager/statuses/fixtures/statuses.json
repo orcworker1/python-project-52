@@ -1,0 +1,30 @@
+[
+  {
+    "model": "statuses.status",
+    "fields": {
+      "name": "aboba",
+      "created_at": "2025-10-28T12:00:00Z"
+    }
+  },
+
+  {
+    "model": "statuses.status",
+    "fields": {
+      "name": "abab",
+      "created_at": "2025-11-28T12:00:00Z"
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+      "username": "test_user",
+      "first_name": "tota",
+      "last_name": "tata",
+      "password": "pbkdf2_sha256$1000000$VDEuJxpSwKTwqHb62RituG$AlqynT1IxXimvMbpeeeGdZrbc9eYj/NjHleA19G5EiA="
+    }
+  }
+]
+
+
+
