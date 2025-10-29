@@ -14,6 +14,10 @@ class Task(models.Model):
     author = models.ForeignKey(User, on_delete=models.PROTECT, related_name='created_task')
     labels = models.ManyToManyField(Labels, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    class Meta:
+        ordering = ['id']
+    def __str__(self):
+        return self.name
 
 
 

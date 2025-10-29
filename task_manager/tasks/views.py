@@ -20,5 +20,16 @@ class CreateTask(CreateView):
     model = Task
     template_name = 'tasks/create.html'
     form_class = TaskForm
+    success_url = reverse_lazy('tasks')
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+class UpdateTask(UpdateView):
+    model = Task
+    template_name = 'tasks/update.html'
+    fields = ['name','description','status','executor','labels']
+    success_url = reverse_lazy('tasks')
 
 # Create your views here.

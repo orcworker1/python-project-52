@@ -19,19 +19,21 @@
     </tr>
     </thead>
     <tbody>
+    {% for task in tasks %}
     <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
+      <td>{{ task.id }}</td>
+      <td>{{ task.name }}</td>
+      <td>{{ task.status }}</td>
+      <td>{{ task.author }}</td>
+      <td>{{ task.executor }}</td>
+      <td>{{ task.created_at }}</td>
       <td class="">
           <a class="btn btn-primary" href="#" role="button">Удалить</a>
-          <a class="btn btn-primary" href="#" role="button">Изменить</a>
+          <a class="btn btn-primary" href="{% url 'update_task' task.id %}" role="button">Изменить</a>
       </td>
     </tr>
   </tbody>
+    {% endfor %}
 </table>
 
 
