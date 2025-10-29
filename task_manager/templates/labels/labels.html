@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Метки</h1>
+
+<a class="btn btn-primary w-10 mt-3" href="{% url 'create' %}">Создать Метку</a>
+
+<table class="table table-striped mt-3">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Имя</th>
+        <th>Дата создания</th>
+        <th>Действия</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for label in labels %}
+    <tr>
+        <td>{{label.id}}</td>
+        <td>{{label.name}}</td>
+        <td>{{label.created_at}}</td>
+        <td class="">
+            <a class="btn btn-primary" href="{% url 'delete' label.id %}" role="button">Удалить</a>
+            <a class="btn btn-primary" href="{% url 'update' label.id %}" role="button">Изменить</a>
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+
+</table>
+{% endblock %}

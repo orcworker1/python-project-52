@@ -7,7 +7,7 @@
     <div class="col-md-5">
       <div class="card shadow-lg rounded-4">
         <div class="card-body p-4">
-          <h2 class="text-center mb-4">Редактирование статуса</h2>
+          <h2 class="text-center mb-4">Редактирование метки</h2>
 
           <form method="post" novalidate>
             {% csrf_token %}
@@ -35,7 +35,7 @@
 
             <div class="d-grid gap-2">
               <button type="submit" class="btn btn-primary w-100">Изменить</button>
-              <a href="{% url 'statuses' %}" class="btn btn-outline-secondary w-100">Отмена</a>
+              <a href="{% url 'labels' %}" class="btn btn-outline-secondary w-100">Отмена</a>
             </div>
 
           </form>
