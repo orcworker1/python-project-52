@@ -12,13 +12,13 @@
     <div class="col-md-5">
       <div class="card shadow-lg rounded-4">
         <div class="card-body p-4">
-          <h2 class="text-center mb-4">Удаление Статуса</h2>
-          <p class="text-center text-muted mb-4">Вы уверены, что хотите удалить статус <strong>{{ object.name }}</strong>?</p>
+          <h2 class="text-center mb-4">Удаление задачи</h2>
+          <p class="text-center text-muted mb-4">Вы уверены, что хотите удалить задачу <strong>{{ object.name }}</strong>?</p>
           <form method="post">
             {% csrf_token %}
             <div class="d-grid gap-2">
               <button type="submit" class="btn btn-danger">Да, удалить</button>
-              <a href="{% url 'users' %}" class="btn btn-primary w-100">Отмена</a>
+              <a href="{% url 'tasks' %}" class="btn btn-primary w-100">Отмена</a>
             </div>
           </form>
         </div>

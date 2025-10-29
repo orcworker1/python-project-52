@@ -29,7 +29,22 @@ class CreateTask(CreateView):
 class UpdateTask(UpdateView):
     model = Task
     template_name = 'tasks/update.html'
-    fields = ['name','description','status','executor','labels']
+    form_class = TaskForm
     success_url = reverse_lazy('tasks')
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Задача успешно изменена')
+        return super().form_valid(form)
+
+
+
+class DeleteTask(DeleteView):
+    model = Task
+    template_name = 'tasks/delete.html'
+    success_url = reverse_lazy('tasks')
+
+    def post(self, request, *args, **kwargs):
+        messages.warning(request, 'Задача удалена')
+        return super().post(request, *args, **kwargs)
 
 # Create your views here.
