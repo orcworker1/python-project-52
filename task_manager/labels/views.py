@@ -1,13 +1,10 @@
-from django.shortcuts import render
-from django.shortcuts import render
 from django.contrib.auth.models import User
-from django.contrib.auth.views import LoginView, LogoutView
-from django.contrib.auth.forms import UserCreationForm
 from task_manager.labels.models import Labels
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from .form import LabelsForm
 from django.contrib import messages
+from task_manager.tasks.models import Task
 
 
 class ViewLabels(ListView):
@@ -35,7 +32,12 @@ class DeleteLabels(DeleteView):
     model = Labels
     template_name = 'labels/delete.html'
     success_url = reverse_lazy('labels')
+    
     def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if Task.objects.filter(labels=self.object).exists():
+            messages.error(request, 'Невозможно удалить метку, потому что она используется')
+            return self.get(request, *args, **kwargs)
         messages.warning(request, 'Метка удалена')
         return super().post(request, *args, **kwargs)
 

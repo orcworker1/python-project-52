@@ -4,6 +4,7 @@ from django.db import models
 from task_manager.statuses.models import Status
 from django.contrib.auth.models import User
 from task_manager.labels.models import Labels
+import django_filters
 
 
 class Task(models.Model):
@@ -18,6 +19,9 @@ class Task(models.Model):
         ordering = ['id']
     def __str__(self):
         return self.name
+
+class TaskFilter(django_filters.Filter):
+    pass
 
 
 

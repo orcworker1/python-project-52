@@ -22,8 +22,8 @@
         <td>{{ status.name }}</td>
         <td>{{ status.created_at|date:"d.m.Y" }}</td>
         <td class="">
-            <a class="btn btn-primary" href="{% url 'delete' status.id%}" role="button">Удалить</a>
-            <a class="btn btn-primary" href="{% url 'update' status.id %}" role="button">Изменить</a>
+            <a class="btn btn-primary" href="{% url 'delete_status' status.id%}" role="button">Удалить</a>
+            <a class="btn btn-primary" href="{% url 'update_status' status.id %}" role="button">Изменить</a>
         </td>
     </tr>
     </tbody>

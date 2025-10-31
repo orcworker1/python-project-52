@@ -9,7 +9,7 @@ class UserCRUDtests(TestCase):
 
     def test_create_user(self):
         start_count_user = User.objects.count()
-        response = self.client.post(reverse('create'), {
+        response = self.client.post(reverse('create_user'), {
             'username': 'babushka',
             'first_name':'lala',
             'last_name': 'lolo',
@@ -27,7 +27,7 @@ class UserCRUDtests(TestCase):
     def test_update_user(self):
         user = User.objects.get(username='test_user')
         self.client.force_login(user)
-        response = self.client.post(reverse('update', args=[user.id]),
+        response = self.client.post(reverse('update_user', args=[user.id]),
                     {'first_name': 'new_name', 'last_name': 'new_last'})
         user.refresh_from_db()
         self.assertEqual(user.first_name, 'new_name')
@@ -37,7 +37,7 @@ class UserCRUDtests(TestCase):
     def test_delete_user(self):
         user = User.objects.get(username='second_user')
         self.client.force_login(user)
-        response = self.client.post(reverse('delete', args=[user.id]))
+        response = self.client.post(reverse('delete_user', args=[user.id]))
         self.assertFalse(User.objects.filter(username='second_user').exists())
         self.assertEqual(response.status_code, 302)
 

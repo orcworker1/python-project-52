@@ -20,5 +20,5 @@ shell:
 	python manage.py shell
 
 test:
-	python manage.py test
+	uv run python manage.py test
 

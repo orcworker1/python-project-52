@@ -5,7 +5,7 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.forms import UserCreationForm
 
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView , DetailView
 from .form import TaskForm
 from django.contrib import messages
 
@@ -47,4 +47,9 @@ class DeleteTask(DeleteView):
         messages.warning(request, 'Задача удалена')
         return super().post(request, *args, **kwargs)
 
+
+class DetailViewTask(DetailView):
+    model = Task
+    template_name = 'tasks/detail_view.html'
+    context_object_name = 'task'
 # Create your views here.

@@ -22,8 +22,8 @@
         <td>{{label.name}}</td>
         <td>{{label.created_at}}</td>
         <td class="">
-            <a class="btn btn-primary" href="{% url 'delete' label.id %}" role="button">Удалить</a>
-            <a class="btn btn-primary" href="{% url 'update' label.id %}" role="button">Изменить</a>
+            <a class="btn btn-primary" href="{% url 'delete_label' label.id %}" role="button">Удалить</a>
+            <a class="btn btn-primary" href="{% url 'update_label' label.id %}" role="button">Изменить</a>
         </td>
     </tr>
     {% endfor %}

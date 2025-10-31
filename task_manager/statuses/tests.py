@@ -17,7 +17,7 @@ class StatusCRUDtests(TestCase):
         user = User.objects.get(username='test_user')
         status = Status.objects.get(name='abab')
         self.client.force_login(user)
-        response = self.client.post(reverse('update', args=[status.id]),
+        response = self.client.post(reverse('update_status', args=[status.id]),
                                     {'name':'update_name'})
         status.refresh_from_db()
         self.assertEqual(status.name, 'update_name')
@@ -27,7 +27,7 @@ class StatusCRUDtests(TestCase):
         status = Status.objects.get(name='aboba')
         user = User.objects.get(username='test_user')
         self.client.force_login(user)
-        response = self.client.post(reverse('delete', args=[status.id]))
+        response = self.client.post(reverse('delete_status', args=[status.id]))
         self.assertFalse(Status.objects.filter(name='aboba').exists())
         self.assertEqual(response.status_code, 302)
 

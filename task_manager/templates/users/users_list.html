@@ -22,8 +22,8 @@
       <td>{{ user.first_name }} {{ user.last_name }}</td>
       <td>{{ user.date_joined|date:"d.m.Y" }}</td>
         <td class=''>
-            <a class="btn btn-primary" href="{% url 'delete' user.id %}" role="button">Удалить</a>
-            <a class="btn btn-primary" href="{% url 'update' user.id %}" role="button">Изменить</a>
+            <a class="btn btn-primary" href="{% url 'delete_user' user.id %}" role="button">Удалить</a>
+            <a class="btn btn-primary" href="{% url 'update_user' user.id %}" role="button">Изменить</a>
         </td>
     </tr>
     {% endfor %}
