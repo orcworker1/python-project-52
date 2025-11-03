@@ -106,6 +106,9 @@ LOGIN_REDIRECT_URL = 'index'
 LOGOUT_REDIRECT_URL = 'login'
 LOGIN_URL = 'login'
 
+# Store Django messages in the session to avoid cookie-based fallback issues in production
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
+
 
 
 
