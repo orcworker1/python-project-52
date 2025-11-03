@@ -3,7 +3,7 @@ build:
 
 
 render-start:
-	uv run gunicorn task_manager.wsgi
+	uv run bash -lc
 
 
 install:
