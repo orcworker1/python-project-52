@@ -9,7 +9,7 @@ import django_filters
 
 class Task(models.Model):
     name = models.CharField(max_length=255, unique=True )
-    description = models.CharField(blank=True)
+    description = models.CharField(blank=True, max_length=300)
     status = models.ForeignKey(Status, on_delete=models.PROTECT)
     executor = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='executed_tasks')
     author = models.ForeignKey(User, on_delete=models.PROTECT, related_name='created_task')
