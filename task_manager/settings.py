@@ -30,9 +30,16 @@ if not SECRET_KEY:
 
 DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
 
-
-_raw_hosts = os.environ.get("ALLOWED_HOSTS", "")
-ALLOWED_HOSTS = [h.strip() for h in _raw_hosts.split(",") if h.strip()]
+CSRF_TRUSTED_ORIGINS = [
+    "https://python-project-52-b0ra.onrender.com",
+]
+ALLOWED_HOSTS = [
+    "python-project-52-b0ra.onrender.com",
+    ".onrender.com",
+    "localhost", "127.0.0.1",
+]
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+USE_X_FORWARDED_HOST = True
 
 render_url = os.environ.get("RENDER_EXTERNAL_URL") or os.environ.get("RENDER_EXTERNAL_HOSTNAME")
 if render_url:
