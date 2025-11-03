@@ -115,37 +115,13 @@ WSGI_APPLICATION = 'task_manager.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-if DEBUG:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
-        }
-    }
-else:
-
-    db_url = os.environ.get("DATABASE_URL")
-    if db_url:
-        DATABASES = {
-            "default": dj_database_url.parse(
-                db_url,
-                conn_max_age=600,
-                ssl_require=True,  #
-            )
-        }
-    else:
-
-        DATABASES = {
-            "default": {
-                "ENGINE": "django.db.backends.postgresql",
-                "NAME": os.environ.get("POSTGRES_DB"),
-                "USER": os.environ.get("POSTGRES_USER"),
-                "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
-                "HOST": os.environ.get("POSTGRES_HOST", "localhost"),
-                "PORT": os.environ.get("POSTGRES_PORT", "5432"),
-                "OPTIONS": {"sslmode": "require"},
-            }
-        }
+DATABASES = {
+    "default": dj_database_url.config(
+        default=os.environ.get("DATABASE_URL"),
+        conn_max_age=600,
+        ssl_require=True,
+    )
+}
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 

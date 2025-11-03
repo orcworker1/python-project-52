@@ -3,7 +3,7 @@ build:
 
 
 render-start:
-	EXPORT PATH="$$HOME/.local/bin:$$PATH"; uv run bash -lc "python manage.py migrate --noinput && python manage.py collectstatic --noinput && exec gunicorn task_manager.wsgi:application --bind 0.0.0.0:$$PORT --workers $${WEB_CONCURRENCY:-2}"
+	export PATH="$$HOME/.local/bin:$$PATH"; uv run bash -lc "python manage.py migrate --noinput && python manage.py collectstatic --noinput && exec gunicorn task_manager.wsgi:application --bind 0.0.0.0:$$PORT --workers $${WEB_CONCURRENCY:-2}"
 
 
 install:
