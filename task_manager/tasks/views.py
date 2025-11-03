@@ -9,10 +9,11 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView , 
 from .form import TaskForm
 from django.contrib import messages
 from task_manager.tasks.filtres import TaskFilter
+from django_filters.views import FilterView
 
 from task_manager.tasks.models import Task
 
-class ViewTasks(ListView):
+class ViewTasks(FilterView):
     model = Task
     template_name = 'tasks/tasks.html'
     context_object_name = 'tasks'

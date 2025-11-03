@@ -8,11 +8,11 @@ from .models import Task , Labels , Status, User
 class TaskFilter(df.FilterSet):
     labels = df.ModelChoiceFilter(
         queryset=Labels.objects.all(),
-        lebels='Метка',
+        label='Метка',
         widget=forms.Select(attrs={'class': 'form-select'}))
     status = df.ModelChoiceFilter(
         queryset=Status.objects.all(),
-        labels='Статус',
+        label='Статус',
         widget=forms.Select(attrs={'class':'form-select'}))
     executor = df.ModelChoiceFilter(
         queryset=User.objects.all(),
@@ -29,7 +29,7 @@ class TaskFilter(df.FilterSet):
         model = Task
         fields = ['status', 'executor', 'labels']
 
-    def filters_self_tasks(self, queryset, name, value):
+    def filter_self_tasks(self, queryset, name, value):
         if value:
             user = self.request.user
             return queryset.filter(author=user)
