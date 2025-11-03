@@ -8,6 +8,7 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView , DetailView
 from .form import TaskForm
 from django.contrib import messages
+from task_manager.tasks.filtres import TaskFilter
 
 from task_manager.tasks.models import Task
 
@@ -15,6 +16,7 @@ class ViewTasks(ListView):
     model = Task
     template_name = 'tasks/tasks.html'
     context_object_name = 'tasks'
+    filterset_class = TaskFilter
 
 class CreateTask(CreateView):
     model = Task
