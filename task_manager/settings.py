@@ -55,7 +55,7 @@ for h in ("localhost", "127.0.0.1"):
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
-ALLOWED_HOSTS = []
+ 
 
 
 # Application definition
