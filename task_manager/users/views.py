@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.forms import UserCreationForm
-from .form import CustomUserForm
+from .form import CustomUserForm, CustomAuthenticationForm
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib import messages
@@ -26,6 +26,7 @@ class CreateUser(CreateView):
 class UserLoginView(LoginView):
     template_name = 'users/login.html'
     redirect_authenticated_user = True
+    form_class = CustomAuthenticationForm
     def get_success_url(self):
         return reverse_lazy('index')
     def form_valid(self, form):
