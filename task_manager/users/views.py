@@ -62,6 +62,10 @@ class UserDelete(DeleteView):
             return redirect('users')
         return super().get(request, *args, **kwargs)
 
+    def post(self, request, *args, **kwargs):
+        messages.success(request, 'Пользователь успешно удален')
+        return super().post(request, *args, **kwargs)
+
 
 
 class UserUpdate(UpdateView):
