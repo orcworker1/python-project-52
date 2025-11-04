@@ -37,7 +37,7 @@ class UserLogoutView(LogoutView):
     http_method_names = ['get', 'post']
 
     def get(self, request, *args, **kwargs):
-        messages.info(request, 'Вы вышли из системы')
+        messages.info(request, 'Вы разлогинены')
         return super().post(request, *args, **kwargs)
 
     def get_success_url(self):
