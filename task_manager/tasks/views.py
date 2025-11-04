@@ -48,7 +48,7 @@ class DeleteTask(DeleteView):
     success_url = reverse_lazy('tasks')
 
     def post(self, request, *args, **kwargs):
-        messages.warning(request, 'Задача удалена')
+        messages.success(request, 'Задача успешно удалена')
         return super().post(request, *args, **kwargs)
 
 
