@@ -33,6 +33,7 @@ class TaskFilter(df.FilterSet):
         model = Task
         fields = ['status', 'executor', 'labels']
 
+
     def filter_self_tasks(self, queryset, name, value):
         if value:
             user = self.request.user
