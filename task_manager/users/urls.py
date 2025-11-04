@@ -10,7 +10,7 @@ from .views import (
 urlpatterns = [
     path('', ViewUsers.as_view(), name='users'),
     path('create/', CreateUser.as_view(), name='create_user'),
-    path('update/<int:pk>/',UserUpdate.as_view(), name='update_user'),
-    path('delete/<int:pk>/',UserDelete.as_view(), name='delete_user'),
+    path('<int:pk>/update/',UserUpdate.as_view(), name='update_user'),
+    path('<int:pk>/delete/',UserDelete.as_view(), name='delete_user'),
 
 ]
