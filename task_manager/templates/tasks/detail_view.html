@@ -15,11 +15,17 @@
             <tbody>
               <tr>
                 <th style="width: 40%;">Автор</th>
-                <td>{{ task.author }}</td>
+                <td>{{ task.author.get_full_name|default:task.author.username }}</td>
               </tr>
               <tr>
                 <th>Исполнитель</th>
-                <td>{{ task.executor|default:"—" }}</td>
+                <td>
+                  {% if task.executor %}
+                    {{ task.executor.get_full_name|default:task.executor.username }}
+                  {% else %}
+                    —
+                  {% endif %}
+                </td>
               </tr>
               <tr>
                 <th>Статус</th>
