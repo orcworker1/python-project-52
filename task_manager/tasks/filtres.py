@@ -2,7 +2,11 @@
 
 import django_filters as df
 from django import forms
-from .models import Task , Labels , Status, User
+from django.contrib.auth import get_user_model
+from task_manager.tasks.models import Task
+from task_manager.labels.models import Labels
+from task_manager.statuses.models import Status
+User = get_user_model()
 
 
 class TaskFilter(df.FilterSet):
@@ -34,3 +38,13 @@ class TaskFilter(df.FilterSet):
             user = self.request.user
             return queryset.filter(author=user)
         return queryset
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Show full name if available for executor filter select
+        field = self.form.fields.get('executor')
+        if field is not None:
+            def user_option_label(user: User) -> str:
+                full_name = (user.get_full_name() or '').strip()
+                return full_name if full_name else user.username
+            field.label_from_instance = user_option_label
