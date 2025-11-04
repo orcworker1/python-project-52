@@ -9,7 +9,7 @@ from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
 from django.http import HttpResponseRedirect
 from task_manager.tasks.models import Task
-
+from django.db import models
 
 class ViewUsers(ListView):
     model = User
@@ -58,29 +58,26 @@ class UserDelete(DeleteView):
     template_name = 'users/delete_user.html'
     success_url = reverse_lazy('users')
 
-    def _is_in_use(self, user: User) -> bool:
-        return (
-            Task.objects.filter(author=user).exists()
-            or Task.objects.filter(executor=user).exists()
-        )
-
+    def _in_use(self, user: User) -> bool:
+        return Task.objects.filter(
+            models.Q(author=user) | models.Q(executor=user)
+        ).exists()
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
-        if self._is_in_use(self.object):
+        if self._in_use(self.object):
             messages.error(request, "Невозможно удалить пользователя, потому что он используется")
             return HttpResponseRedirect(self.success_url)
         return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        if self._is_in_use(self.object):
+        if self._in_use(self.object):
             messages.error(request, "Невозможно удалить пользователя, потому что он используется")
             return HttpResponseRedirect(self.success_url)
 
         self.object.delete()
         messages.success(request, "Пользователь успешно удален")
         return HttpResponseRedirect(self.success_url)
-
 
 class UserUpdate(UpdateView):
     model = User
