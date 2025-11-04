@@ -42,7 +42,7 @@ class DeleteLabels(DeleteView):
         if Task.objects.filter(labels=self.object).exists():
             messages.error(request, 'Невозможно удалить метку, потому что она используется')
             return self.get(request, *args, **kwargs)
-        messages.warning(request, 'Метка удалена')
+        messages.success(request, 'Метка успешно удалена')
         return super().post(request, *args, **kwargs)
 
 # Create your views here.
