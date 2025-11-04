@@ -58,34 +58,19 @@ class UserDelete(DeleteView):
     template_name = 'users/delete_user.html'
     success_url = reverse_lazy('users')
 
-    def _is_user_in_use(self, user):
-        """Проверяет, используется ли пользователь в системе"""
-        return (
-            Task.objects.filter(author=user).exists() or
-            Task.objects.filter(executor=user).exists()
-        )
-
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        # Если пользователь используется в задачах — сразу на список с ошибкой
-        if self._is_user_in_use(self.object):
-            messages.error(request, 'Невозможно удалить пользователя, потому что он используется')
-            return HttpResponseRedirect(reverse_lazy('users'))
-        # Иначе показываем страницу подтверждения (включая удаление себя)
-        return super().get(request, *args, **kwargs)
-
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-       
-        if request.user.is_authenticated and self.object.pk == request.user.pk:
-            messages.error(request, 'Невозможно удалить пользователя, потому что он используется')
-            return HttpResponseRedirect(reverse_lazy('users'))
-        if self._is_user_in_use(self.object):
-            messages.error(request, 'Невозможно удалить пользователя, потому что он используется')
-            return HttpResponseRedirect(reverse_lazy('users'))
 
-        messages.success(request, 'Пользователь успешно удален')
-        return super().post(request, *args, **kwargs)
+
+        Task.objects.filter(author=self.object).update(author=None)
+        Task.objects.filter(executor=self.object).update(executor=None)
+
+
+        self.object.delete()
+
+        messages.success(request, "Пользователь успешно удален")
+
+        return HttpResponseRedirect(self.success_url)
 
 
 class UserUpdate(UpdateView):
