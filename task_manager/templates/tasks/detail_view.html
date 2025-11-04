@@ -8,8 +8,7 @@
       <div class="card shadow-lg rounded-4">
         <div class="card-body p-4">
           <h2 class="text-center mb-3">{{ task.name }}</h2>
-
-
+          <h5 class="text-muted text-center mb-4">{{ task.description|default:"Задача без описания" }}</h5>
           <hr class="mb-4">
 
           <table class="table table-bordered align-middle">
