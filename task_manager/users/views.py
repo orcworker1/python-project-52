@@ -6,6 +6,7 @@ from .form import CustomUserForm, CustomAuthenticationForm, CustomUserUpdateForm
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib import messages
+from django.contrib.auth import update_session_auth_hash
 
 class ViewUsers(ListView):
     model = User
@@ -60,5 +61,8 @@ class UserUpdate(UpdateView):
     success_url = reverse_lazy('users')
 
     def form_valid(self, form):
+        response = super().form_valid(form)
+        if form.cleaned_data.get('password1'):
+            update_session_auth_hash(self.request, self.object)
         messages.success(self.request, 'Пользователь успешно изменен')
-        return super().form_valid(form)
+        return response
