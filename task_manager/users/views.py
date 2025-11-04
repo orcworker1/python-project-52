@@ -52,16 +52,16 @@ class UserDelete(DeleteView):
     
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
-        in_use = Task.objects.filter(author=self.object).exists() or Task.objects.filter(executor=self.object).exists()
+        in_use = (
+            hasattr(self.object, 'created_task') and self.object.created_task.exists()
+        ) or (
+            hasattr(self.object, 'executed_tasks') and self.object.executed_tasks.exists()
+        ) or Task.objects.filter(author=self.object).exists() or Task.objects.filter(executor=self.object).exists()
         if in_use:
             messages.error(request, 'Невозможно удалить пользователя, потому что он используется')
             return redirect('users')
-        # показать страницу подтверждения удаления
         return super().get(request, *args, **kwargs)
 
-    def post(self, request, *args, **kwargs):
-        messages.success(request, 'Пользователь успешно удален')
-        return super().post(request, *args, **kwargs)
 
 
 class UserUpdate(UpdateView):
