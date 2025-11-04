@@ -41,6 +41,6 @@ class DeleteStatus(DeleteView):
     success_url = reverse_lazy('statuses')
 
     def post(self, request, *args, **kwargs):
-        messages.warning(request, 'Статус удалён')
+        messages.success(request, 'Статус успешно удален')
         return super().post(request, *args, **kwargs)
 
