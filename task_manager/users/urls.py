@@ -3,9 +3,9 @@ from .views import (
     ViewUsers,
     CreateUser,
     UserUpdate,
-    UserDelete
 )
 
+from task_manager.users.views import UserDelete
 
 urlpatterns = [
     path('', ViewUsers.as_view(), name='users'),
