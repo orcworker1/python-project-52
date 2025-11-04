@@ -56,8 +56,8 @@ class UserDelete(DeleteView):
         if in_use:
             messages.error(request, 'Невозможно удалить пользователя, потому что он используется')
             return redirect('users')
-        messages.success(request, 'Пользователь успешно удален')
-        return self.delete(request, *args, **kwargs)
+        # показать страницу подтверждения удаления
+        return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         messages.success(request, 'Пользователь успешно удален')
