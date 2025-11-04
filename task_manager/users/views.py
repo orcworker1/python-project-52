@@ -56,7 +56,7 @@ class UserDelete(DeleteView):
 class UserUpdate(UpdateView):
     model = User
     template_name = 'users/update_user.html'
-    fields = ['first_name','last_name']
+    fields = ['first_name','last_name', 'username']
     success_url = reverse_lazy('users')
 
     def form_valid(self, form):
