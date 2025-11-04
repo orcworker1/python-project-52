@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.forms import UserCreationForm
@@ -52,15 +52,12 @@ class UserDelete(DeleteView):
     
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
-        # Если пользователь используется в задачах, сразу редиректим с ошибкой
         in_use = Task.objects.filter(author=self.object).exists() or Task.objects.filter(executor=self.object).exists()
         if in_use:
             messages.error(request, 'Невозможно удалить пользователя, потому что он используется')
-            return render(request, 'users/users_list.html', {
-                'users': User.objects.all()
-            })
-        # Иначе показываем страницу подтверждения
-        return super().get(request, *args, **kwargs)
+            return redirect('users')
+        messages.success(request, 'Пользователь успешно удален')
+        return self.delete(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         messages.success(request, 'Пользователь успешно удален')
