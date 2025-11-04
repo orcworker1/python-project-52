@@ -22,6 +22,7 @@ from .users.views import UserLoginView, UserLogoutView, ViewUsers
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
+    path('rollbar-test/', views.rollbar_test, name='rollbar_test'),
     path('login/', UserLoginView.as_view(), name='login'),
     path('logout/', UserLogoutView.as_view(), name='logout'),
     path("users/", include("task_manager.users.urls", )),

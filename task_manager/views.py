@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from django.shortcuts import render
 from django.http import HttpResponse
+import rollbar
 
 def index(request):
     return render(
@@ -10,8 +10,11 @@ def index(request):
 
 
 
-#def index(request):
-#    a = None
-#    a.hello() # Creating an error with an invalid line of code
-#    return HttpResponse("Hello, world. You're at the pollapp index.")
+def rollbar_test(request):
+    try:
+        a = None
+        a.hello()
+    except Exception:
+        rollbar.report_exc_info()
+        raise
 
