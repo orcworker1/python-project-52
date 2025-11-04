@@ -32,11 +32,12 @@ DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
 
 CSRF_TRUSTED_ORIGINS = [
     "https://python-project-52-b0ra.onrender.com",
+    "http://webserver:9000",
 ]
 ALLOWED_HOSTS = [
     "python-project-52-b0ra.onrender.com",
     ".onrender.com",
-    "localhost", "127.0.0.1",
+    "localhost", "127.0.0.1", "webserver",
 ]
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 USE_X_FORWARDED_HOST = True
