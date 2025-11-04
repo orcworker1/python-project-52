@@ -52,11 +52,16 @@ class UserDelete(DeleteView):
     
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
-        # Нельзя удалять самого себя — сразу возврат к списку
-        if request.user.is_authenticated and self.object.pk == request.user.pk:
+        # Если пользователь используется в задачах, не показываем подтверждение
+        in_use = (
+            hasattr(self.object, 'created_task') and self.object.created_task.exists()
+        ) or (
+            hasattr(self.object, 'executed_tasks') and self.object.executed_tasks.exists()
+        ) or Task.objects.filter(author=self.object).exists() or Task.objects.filter(executor=self.object).exists()
+        if in_use:
             messages.error(request, 'Невозможно удалить пользователя, потому что он используется')
             return redirect('users')
-        # Для остальных всегда показываем страницу подтверждения
+        # Иначе показываем страницу подтверждения даже если это сам пользователь
         return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
