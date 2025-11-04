@@ -7,9 +7,11 @@ User = get_user_model()
 class TaskForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Ensure executor options use usernames for labels as expected by tests
         self.fields['executor'].queryset = User.objects.all()
-        self.fields['executor'].label_from_instance = lambda u: u.username
+        def user_option_label(user: User) -> str:
+            full_name = (user.get_full_name() or '').strip()
+            return full_name if full_name else user.username
+        self.fields['executor'].label_from_instance = user_option_label
     class Meta:
         model = Task
         fields = ['name','description','status','executor','labels']
