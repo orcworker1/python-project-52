@@ -27,6 +27,10 @@ class UpdateLabels(UpdateView):
     fields = ['name']
     success_url = reverse_lazy('labels')
 
+    def form_valid(self, form):
+        messages.success(self.request, 'Метка успешно изменена')
+        return super().form_valid(form)
+
 
 class DeleteLabels(DeleteView):
     model = Labels
