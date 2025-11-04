@@ -7,6 +7,7 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
+from task_manager.tasks.models import Task
 
 class ViewUsers(ListView):
     model = User
@@ -51,8 +52,15 @@ class UserDelete(DeleteView):
     
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
-        messages.success(request, 'Пользователь успешно удален')
-        return self.delete(request, *args, **kwargs)
+        # Если пользователь используется в задачах, сразу редиректим с ошибкой
+        in_use = Task.objects.filter(author=self.object).exists() or Task.objects.filter(executor=self.object).exists()
+        if in_use:
+            messages.error(request, 'Невозможно удалить пользователя, потому что он используется')
+            return render(request, 'users/users_list.html', {
+                'users': User.objects.all()
+            })
+        # Иначе показываем страницу подтверждения
+        return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         messages.success(request, 'Пользователь успешно удален')
