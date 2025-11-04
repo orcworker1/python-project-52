@@ -41,7 +41,7 @@ class UserLogoutView(LogoutView):
         return super().post(request, *args, **kwargs)
 
     def get_next_page(self):
-        return reverse_lazy('login')
+        return reverse_lazy('index')
 
 class UserDelete(DeleteView):
     model = User
