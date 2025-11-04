@@ -7,6 +7,7 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
+from django.http import HttpResponseRedirect
 from task_manager.tasks.models import Task
 
 
@@ -67,7 +68,7 @@ class UserDelete(DeleteView):
             executor=self.object).exists()
         if in_use:
             messages.error(request, 'Невозможно удалить пользователя, потому что он используется')
-            return redirect('users')
+            return HttpResponseRedirect(reverse_lazy('users'))
         return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
@@ -80,7 +81,7 @@ class UserDelete(DeleteView):
             executor=self.object).exists())
         if in_use:
             messages.error(request, 'Невозможно удалить пользователя, потому что он используется')
-            return self.get(request, *args, **kwargs)
+            return HttpResponseRedirect(reverse_lazy('users'))
 
         messages.success(request, 'Пользователь успешно удален')
         return super().post(request, *args, **kwargs)
