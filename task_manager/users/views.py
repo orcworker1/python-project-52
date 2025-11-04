@@ -50,7 +50,7 @@ class UserDelete(DeleteView):
     success_url = reverse_lazy('users')
     
     def post(self, request, *args, **kwargs):
-        messages.success(request, 'Пользователь успешно удалён')
+        messages.success(request, 'Пользователь успешно удален')
         return super().post(request, *args, **kwargs)
 
 
