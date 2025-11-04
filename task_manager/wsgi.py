@@ -18,7 +18,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'task_manager.settings')
 
 rollbar.init(
     os.environ.get('rollbar_access_token'),
-    environment='development' if os.environ.get('DEBUG', 'False').lower() == 'true' else 'production',
+    environment=os.environ.get('DJANGO_SETTINGS_MODULE', 'development'),
 )
 
 application = get_wsgi_application()
