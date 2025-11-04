@@ -30,7 +30,7 @@ class UserLoginView(LoginView):
     def get_success_url(self):
         return reverse_lazy('index')
     def form_valid(self, form):
-        messages.success(self.request,'Вы успешно авторизовались!')
+        messages.success(self.request,'Вы залогинены')
         return super().form_valid(form)
 
 class UserLogoutView(LogoutView):
