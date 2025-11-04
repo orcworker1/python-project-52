@@ -10,12 +10,20 @@ from django.contrib.auth import update_session_auth_hash
 from django.http import HttpResponseRedirect
 from task_manager.tasks.models import Task
 from django.db import models
-from django.db.models import Q
+from django.db.models import Exists, OuterRef, Q
+
 
 class ViewUsers(ListView):
     model = User
     template_name = 'users/users_list.html'
     context_object_name = 'users'
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        has_tasks = Task.objects.filter(
+            Q(author=OuterRef('pk')) | Q(executor=OuterRef('pk'))
+        )
+        return qs.annotate(in_use=Exists(has_tasks))
 
 
 class CreateUser(CreateView):
