@@ -21,10 +21,6 @@ dependencies = [
 requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
-[tool.setuptools]
-packages = ["task_manager"]
-
-# Alternatively, package discovery can be narrowed like this:
-# [tool.setuptools.packages.find]
-# include = ["task_manager*"]
-# exclude = ["image*"]
+[tool.setuptools.packages.find]
+include = ["task_manager*"]
+exclude = ["image*"]
