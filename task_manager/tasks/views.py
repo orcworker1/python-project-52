@@ -27,6 +27,7 @@ class CreateTask(CreateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
+        messages.success(self.request, 'Задача успешно создана')
         return super().form_valid(form)
 
 class UpdateTask(UpdateView):
