@@ -10,6 +10,7 @@ from django.contrib.auth import update_session_auth_hash
 from django.http import HttpResponseRedirect
 from task_manager.tasks.models import Task
 from django.db import models
+from django.db.models import Q
 
 class ViewUsers(ListView):
     model = User
@@ -55,21 +56,23 @@ class UserLogoutView(LogoutView):
 
 class UserDelete(DeleteView):
     model = User
-    template_name = 'users/delete_user.html'
-    success_url = reverse_lazy('users')
+    template_name = 'users/delete_user.html'          # твой шаблон подтверждения
+    success_url = reverse_lazy('users')         # name роутa списка: должен вести на /users/
 
     def _in_use(self, user: User) -> bool:
-        return Task.objects.filter(
-            models.Q(author=user) | models.Q(executor=user)
-        ).exists()
-    def get(self, request, *args, **kwargs):
+        # исходя из твоей модели: author=PROTECT, executor=SET_NULL
+        return Task.objects.filter(Q(author=user) | Q(executor=user)).exists()
+
+    # ← ЛОВИМ ЛЮБОЙ МЕТОД ДО get()/post()
+    def dispatch(self, request, *args, **kwargs):
         self.object = self.get_object()
-        if self._in_use(self.object):
+        if request.method.lower() == "get" and self._in_use(self.object):
             messages.error(request, "Невозможно удалить пользователя, потому что он используется")
             return HttpResponseRedirect(self.success_url)
-        return super().get(request, *args, **kwargs)
+        return super().dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
+        # защита, если кто-то отправит POST напрямую
         self.object = self.get_object()
         if self._in_use(self.object):
             messages.error(request, "Невозможно удалить пользователя, потому что он используется")
