@@ -40,7 +40,7 @@ class UserLogoutView(LogoutView):
         messages.info(request, 'Вы вышли из системы')
         return super().post(request, *args, **kwargs)
 
-    def get_next_page(self):
+    def get_success_url(self):
         return reverse_lazy('index')
 
 class UserDelete(DeleteView):

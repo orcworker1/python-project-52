@@ -33,7 +33,7 @@ DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
 CSRF_TRUSTED_ORIGINS = [
     "https://python-project-52-b0ra.onrender.com",
 ]
-# Allow HTTP origin only in development/CI to satisfy security scanners
+
 if DEBUG or os.environ.get("ALLOW_HTTP_ORIGIN", "").lower() == "true":
     CSRF_TRUSTED_ORIGINS.append("http://webserver:9000")
 ALLOWED_HOSTS = [
@@ -106,7 +106,7 @@ STORAGES = {
 ROOT_URLCONF = 'task_manager.urls'
 
 LOGIN_REDIRECT_URL = 'index'
-LOGOUT_REDIRECT_URL = 'login'
+LOGOUT_REDIRECT_URL = 'index'
 LOGIN_URL = 'login'
 
 
