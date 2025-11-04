@@ -21,7 +21,7 @@
               <label for="{{ form.username.id_for_label }}" class="form-label">
                 {{ form.username.label }}
               </label>
-              {{ form.username }}
+              {{ form.username.as_widget(attrs={"placeholder": "Имя пользователя"}) }}
               {% if form.username.errors %}
                 <div class="text-danger">
                   {{ form.username.errors }}
@@ -33,7 +33,7 @@
               <label for="{{ form.password.id_for_label }}" class="form-label">
                 {{ form.password.label }}
               </label>
-              {{ form.password }}
+              {{ form.password.as_widget(attrs={"placeholder": "Пароль"}) }}
               {% if form.password.errors %}
                 <div class="text-danger">
                   {{ form.password.errors }}

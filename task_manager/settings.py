@@ -32,8 +32,10 @@ DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
 
 CSRF_TRUSTED_ORIGINS = [
     "https://python-project-52-b0ra.onrender.com",
-    "http://webserver:9000",
 ]
+# Allow HTTP origin only in development/CI to satisfy security scanners
+if DEBUG or os.environ.get("ALLOW_HTTP_ORIGIN", "").lower() == "true":
+    CSRF_TRUSTED_ORIGINS.append("http://webserver:9000")
 ALLOWED_HOSTS = [
     "python-project-52-b0ra.onrender.com",
     ".onrender.com",
