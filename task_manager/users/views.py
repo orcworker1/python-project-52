@@ -78,10 +78,9 @@ class UserDelete(DeleteView):
                   (hasattr(self.object, 'executed_tasks') and self.object.executed_tasks.exists()
                  ) or Task.objects.filter(author=self.object).exists() or Task.objects.filter(
             executor=self.object).exists())
-
         if in_use:
             messages.error(request, 'Невозможно удалить пользователя, потому что он используется')
-            return redirect('users')
+            return self.get(request, *args, **kwargs)
 
         messages.success(request, 'Пользователь успешно удален')
         return super().post(request, *args, **kwargs)
