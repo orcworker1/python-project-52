@@ -67,10 +67,11 @@ class UserDelete(DeleteView):
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
-        if request.user.is_authenticated and self.object.pk == request.user.pk:
+        # Если пользователь используется в задачах — сразу на список с ошибкой
+        if self._is_user_in_use(self.object):
             messages.error(request, 'Невозможно удалить пользователя, потому что он используется')
             return HttpResponseRedirect(reverse_lazy('users'))
-        # Для остальных показываем страницу подтверждения
+        # Иначе показываем страницу подтверждения (включая удаление себя)
         return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
