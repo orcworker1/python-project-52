@@ -93,7 +93,7 @@ class UserDelete(DeleteView):
     template_name = 'users/delete_user.html'
     success_url = reverse_lazy('users')
 
-    def delete(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         success_url = self.get_success_url()
 
