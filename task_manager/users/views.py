@@ -94,17 +94,12 @@ class UserDeleteView(LoginRequiredMixin, DeleteView):
 
     def get(self, request, *args, **kwargs):
         user = self.get_object()
-        # нельзя удалять самого себя
+        # Если удаляет самого себя — сразу возвращаемся на список с ошибкой
         if request.user.is_authenticated and user.pk == request.user.pk:
             messages.error(request,
                            "Невозможно удалить пользователя, потому что он используется")
             return redirect("users")
-        # если пользователь используется в задачах — сразу вернёмся на список
-        if ((hasattr(user, "created_tasks") and user.created_tasks.exists()) or
-            (hasattr(user, "executed_tasks") and user.executed_tasks.exists())):
-            messages.error(request,
-                           "Невозможно удалить пользователя, потому что он используется")
-            return redirect("users")
+        # Для остальных показываем страницу подтверждения, даже если пользователь используется
         return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
