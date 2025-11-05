@@ -85,30 +85,27 @@ class UserLogoutView(LogoutView):
         return reverse_lazy('index')
 
 
-
 class UserDeleteView(LoginRequiredMixin, DeleteView):
     model = User
     template_name = "users/delete_user.html"
     success_url = reverse_lazy("users")
     login_url = "login"
 
-    def get(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         user = self.get_object()
-        # Нельзя удалять самого себя — сразу возвращаемся на список с ошибкой
+
         if request.user.is_authenticated and user.pk == request.user.pk:
             messages.error(request,
                            "Невозможно удалить пользователя, потому что он используется")
             return redirect("users")
-        # Для остальных показываем страницу подтверждения
-        return super().get(request, *args, **kwargs)
 
-    def post(self, request, *args, **kwargs):
-        user = self.get_object()
-        if (hasattr(user, "created_tasks") and user.created_tasks.exists()) or \
-           (hasattr(user, "executed_tasks") and user.executed_tasks.exists()):
+
+        if (hasattr(user, "created_task") and user.created_task.exists()) or \
+                (hasattr(user, "executed_tasks") and user.executed_tasks.exists()):
             messages.error(request,
                            "Невозможно удалить пользователя, потому что он используется")
             return redirect("users")
+
         messages.success(request, "Пользователь успешно удален")
         return super().post(request, *args, **kwargs)
 
