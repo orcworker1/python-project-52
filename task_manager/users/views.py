@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.forms import UserCreationForm
 from .form import CustomUserForm, CustomAuthenticationForm, CustomUserUpdateForm
 from django.urls import reverse_lazy
@@ -16,7 +17,6 @@ from django.contrib.auth import get_user_model
 from django.db.models.deletion import ProtectedError
 from django.db.models.deletion import ProtectedError
 from django.db import transaction
-
 
 
 
@@ -92,7 +92,7 @@ class UserDelete(DeleteView):
     template_name = 'users/delete_user.html'
     success_url = reverse_lazy('users')
 
-    def _in_use(self, user: User) -> bool:
+    def _in_use(self) -> bool:
         uid = self.object.pk
         return Task.objects.filter(models.Q(author_id=uid) | models.Q(executor_id=uid)).exists()
 
@@ -100,12 +100,12 @@ class UserDelete(DeleteView):
         self.object = self.get_object()
         if self._in_use(self.object):
             messages.error(request, "Невозможно удалить пользователя, потому что он используется")
-            return HttpResponseRedirect(self.success_url())
+            return HttpResponseRedirect(self.get_success_url())
         return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        success_url = self.success_url()
+        success_url = self.get_success_url()
         try:
             self.object.delete()
             messages.success(request, "Пользователь успешно удален")
