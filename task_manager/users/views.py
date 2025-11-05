@@ -106,21 +106,11 @@ class UserDelete(DeleteView):
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         success_url = self.get_success_url()
-
-        fallback = (
-                User.objects.filter(is_superuser=True)
-                .exclude(pk=self.object.pk)
-                .first()
-                or User.objects.exclude(pk=self.object.pk).first()
-        )
         try:
-            with transaction.atomic():
-                if fallback:
-                    Task.objects.filter(author=self.object).update(author=fallback)
-                self.object.delete()
-            messages.success(self.request, "Пользователь успешно удален")
+            self.object.delete()
+            messages.success(request, "Пользователь успешно удален")
         except ProtectedError:
-            messages.error(self.request, "Невозможно удалить пользователя, потому что он используется")
+            messages.error(request, "Невозможно удалить пользователя, потому что он используется")
         return HttpResponseRedirect(success_url)
 
 
