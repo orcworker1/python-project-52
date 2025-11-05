@@ -99,9 +99,8 @@ class UserDeleteView(LoginRequiredMixin, DeleteView):
                            "Невозможно удалить пользователя, потому что он используется")
             return redirect("users")
 
-
-        if (hasattr(user, "created_task") and user.created_task.exists()) or \
-                (hasattr(user, "executed_tasks") and user.executed_tasks.exists()):
+        if Task.objects.filter(author=user).exists() or \
+           Task.objects.filter(executor=user).exists():
             messages.error(request,
                            "Невозможно удалить пользователя, потому что он используется")
             return redirect("users")
