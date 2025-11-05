@@ -92,6 +92,20 @@ class UserDeleteView(DeleteView,OnlySelfMixin, LoginRequiredMixin):
     success_url = reverse_lazy("users")
     login_url = "login"
 
+    def get(self, request, *args, **kwargs):
+        user = self.get_object()
+        if request.user.is_authenticated and user.pk == request.user.pk:
+            messages.error(request,
+                           "Невозможно удалить пользователя, потому что он используется")
+            return redirect("users")
+      
+        if ((hasattr(user, "created_tasks") and user.created_tasks.exists()) or
+            (hasattr(user, "executed_tasks") and user.executed_tasks.exists())):
+            messages.error(request,
+                           "Невозможно удалить пользователя, потому что он используется")
+            return redirect("users")
+        return super().get(request, *args, **kwargs)
+
     def post(self, request, *args, **kwargs):
         user = self.get_object()
         if (hasattr(user, "created_tasks") and user.created_tasks.exists()) or \
