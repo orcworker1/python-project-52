@@ -13,6 +13,7 @@ from django.db import models
 from django.db.models import Exists, OuterRef, Q
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth import get_user_model
+from django.db.models.deletion import ProtectedError
 
 
 User = get_user_model()
@@ -85,25 +86,20 @@ class UserLogoutView(LogoutView):
         return reverse_lazy('index')
 
 
-class UserDeleteView(LoginRequiredMixin, DeleteView):
+class UserDelete(DeleteView):
     model = User
-    template_name = "users/delete_user.html"
-    success_url = reverse_lazy("users")
-    login_url = "login"
+    template_name = 'users/delete_user.html'
+    success_url = reverse_lazy('users')
 
-    def post(self, request, *args, **kwargs):
-        user = self.get_object()
-
-        if request.user.pk == user.pk:
-            messages.error(request,
-                           "Невозможно удалить пользователя, потому что он используется")
-            return redirect("users")
-
-        # Разрешаем удаление не-самого пользователя независимо от наличия задач
-
-        messages.success(request, "Пользователь успешно удален")
-        return super().post(request, *args, **kwargs)
-
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+        try:
+            self.object.delete()
+            messages.success(self.request, "Пользователь успешно удален")
+        except ProtectedError:
+            messages.error(self.request, "Невозможно удалить пользователя, потому что он используется")
+        return HttpResponseRedirect(success_url)
 
 
 
