@@ -94,7 +94,7 @@ class UserDeleteView(LoginRequiredMixin, DeleteView):
     def post(self, request, *args, **kwargs):
         user = self.get_object()
 
-        if request.user.is_authenticated and user.pk == request.user.pk:
+        if request.user.pk == user.pk:
             messages.error(request,
                            "Невозможно удалить пользователя, потому что он используется")
             return redirect("users")
