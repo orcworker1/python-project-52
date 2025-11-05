@@ -11,6 +11,29 @@ from django.http import HttpResponseRedirect
 from task_manager.tasks.models import Task
 from django.db import models
 from django.db.models import Exists, OuterRef, Q
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth import get_user_model
+
+
+User = get_user_model()
+
+
+class OnlySelfMixin(UserPassesTestMixin):
+    def test_func(self):
+        obj = self.get_object()
+        return (self.request.user.is_authenticated and
+                obj.pk == self.request.user.pk)
+
+    def handle_no_permission(self):
+        if not self.request.user.is_authenticated:
+            messages.error(self.request,
+                           "Вы не авторизованы! Пожалуйста, войдите в систему")
+            return super().handle_no_permission()
+        messages.error(self.request,
+                       "У вас нет разрешения на изменение другого пользователя")
+        return redirect("users:list")
+
+
 
 
 class ViewUsers(ListView):
@@ -62,33 +85,26 @@ class UserLogoutView(LogoutView):
         return reverse_lazy('index')
 
 
-class UserDelete(DeleteView):
+
+class UserDeleteView(DeleteView,OnlySelfMixin, LoginRequiredMixin):
     model = User
-    template_name = 'users/delete_user.html'          # твой шаблон подтверждения
-    success_url = reverse_lazy('users')         # name роутa списка: должен вести на /users/
-
-    def _in_use(self, user: User) -> bool:
-        # исходя из твоей модели: author=PROTECT, executor=SET_NULL
-        return Task.objects.filter(Q(author=user) | Q(executor=user)).exists()
-
-    # ← ЛОВИМ ЛЮБОЙ МЕТОД ДО get()/post()
-    def dispatch(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        if request.method.lower() == "get" and self._in_use(self.object):
-            messages.error(request, "Невозможно удалить пользователя, потому что он используется")
-            return HttpResponseRedirect(self.success_url)
-        return super().dispatch(request, *args, **kwargs)
+    template_name = "users/delete_user.html"
+    success_url = reverse_lazy("users")
+    login_url = "login"
 
     def post(self, request, *args, **kwargs):
-        # защита, если кто-то отправит POST напрямую
-        self.object = self.get_object()
-        if self._in_use(self.object):
-            messages.error(request, "Невозможно удалить пользователя, потому что он используется")
-            return HttpResponseRedirect(self.success_url)
-
-        self.object.delete()
+        user = self.get_object()
+        if (hasattr(user, "created_tasks") and user.created_tasks.exists()) or \
+           (hasattr(user, "executed_tasks") and user.executed_tasks.exists()):
+            messages.error(request,
+                           "Невозможно удалить пользователя, потому что он используется")
+            return redirect("users")
         messages.success(request, "Пользователь успешно удален")
-        return HttpResponseRedirect(self.success_url)
+        return super().post(request, *args, **kwargs)
+
+
+
+
 
 class UserUpdate(UpdateView):
     model = User
