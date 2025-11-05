@@ -14,6 +14,8 @@ from django.db.models import Exists, OuterRef, Q
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth import get_user_model
 from django.db.models.deletion import ProtectedError
+from django.db.models.deletion import ProtectedError
+from django.db import transaction
 
 
 User = get_user_model()
@@ -94,8 +96,18 @@ class UserDelete(DeleteView):
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
         success_url = self.get_success_url()
+
+        fallback = (
+                User.objects.filter(is_superuser=True)
+                .exclude(pk=self.object.pk)
+                .first()
+                or User.objects.exclude(pk=self.object.pk).first()
+        )
         try:
-            self.object.delete()
+            with transaction.atomic():
+                if fallback:
+                    Task.objects.filter(author=self.object).update(author=fallback)
+                self.object.delete()
             messages.success(self.request, "Пользователь успешно удален")
         except ProtectedError:
             messages.error(self.request, "Невозможно удалить пользователя, потому что он используется")
