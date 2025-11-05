@@ -18,7 +18,6 @@ from django.db.models.deletion import ProtectedError
 from django.db import transaction
 
 
-User = get_user_model()
 
 
 class OnlySelfMixin(UserPassesTestMixin):
@@ -94,7 +93,8 @@ class UserDelete(DeleteView):
     success_url = reverse_lazy('users')
 
     def _in_use(self, user: User) -> bool:
-        return Task.objects.filter(Q(author=user) | Q(executor=user)).exists()
+        uid = self.object.pk
+        return Task.objects.filter(models.Q(author_id=uid) | models.Q(executor_id=uid)).exists()
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
