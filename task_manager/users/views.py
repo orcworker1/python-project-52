@@ -93,6 +93,16 @@ class UserDelete(DeleteView):
     template_name = 'users/delete_user.html'
     success_url = reverse_lazy('users')
 
+    def _in_use(self, user: User) -> bool:
+        return Task.objects.filter(Q(author=user) | Q(executor=user)).exists()
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if self._in_use(self.object):
+            messages.error(request, "Невозможно удалить пользователя, потому что он используется")
+            return HttpResponseRedirect(self.get_success_url())
+        return super().get(request, *args, **kwargs)
+
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         success_url = self.get_success_url()
@@ -112,6 +122,8 @@ class UserDelete(DeleteView):
         except ProtectedError:
             messages.error(self.request, "Невозможно удалить пользователя, потому что он используется")
         return HttpResponseRedirect(success_url)
+
+
 
 
 
