@@ -36,6 +36,7 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     'localhost',
     '0.0.0.0',
+    'python-project-52-b0ra.onrender.com',
 ]
 
 
