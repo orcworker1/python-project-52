@@ -1,46 +1,71 @@
-from django.shortcuts import render
-from django.contrib.auth.models import User
-from django.contrib.auth.views import LoginView, LogoutView
-from django.contrib.auth.forms import UserCreationForm
-from .form import StatusForm
+from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
-from django.contrib import messages
-from .models import Status
+from django.utils.translation import gettext_lazy as _
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    ListView,
+    UpdateView,
+)
+
+from task_manager.mixins import (
+    CustomLoginRequiredMixin,
+    ProtectErrorMixin,
+)
+from task_manager.statuses.forms import StatusCreationForm
+from task_manager.statuses.models import Status
+
+URL_INDEX = 'statuses:index'
 
 
-class ViewStatus(ListView):
+class StatusListView(CustomLoginRequiredMixin, ListView):
     model = Status
     template_name = 'statuses/status.html'
     context_object_name = 'statuses'
+    ordering = ['id']
 
-class CreateStatus(CreateView):
+
+class StatusCreateView(CustomLoginRequiredMixin,
+                       SuccessMessageMixin,
+                       CreateView):
     model = Status
-    template_name = 'statuses/created.html'
-    form_class = StatusForm
-    success_url = reverse_lazy('statuses')
+    template_name = 'statuses/create.html'
+    form_class = StatusCreationForm
+    success_url = reverse_lazy(URL_INDEX)
+    success_message = _('Status was created successfully')
+    extra_context = {
+        'title': _('Create status'),
+        'button_name': _('Create')
+    }
 
-    def post(self, request, *args, **kwargs):
-        messages.success(request, 'Статус успешно создан')
-        return super().post(request, *args, **kwargs)
 
-class UpdateStatus(UpdateView):
+class StatusUpdateView(CustomLoginRequiredMixin,
+                       SuccessMessageMixin,
+                       UpdateView):
+    form_class = StatusCreationForm
     model = Status
-    template_name = 'statuses/update.html'
-    fields = ['name']
-    success_url = reverse_lazy('statuses')
+    template_name = 'statuses/create.html'
+    success_url = reverse_lazy(URL_INDEX)
+    success_message = _('Status was updated successfully')
+    extra_context = {
+        'title': _('Update status'),
+        'button_name': _('Update')
+    }
 
-    def form_valid(self, form):
-        messages.success(self.request, 'Статус успешно изменен')
-        return super().form_valid(form)
 
-
-class DeleteStatus(DeleteView):
-    model = Status
+class StatusDeleteView(CustomLoginRequiredMixin,
+                       SuccessMessageMixin,
+                       ProtectErrorMixin,
+                       DeleteView):
     template_name = 'statuses/delete.html'
-    success_url = reverse_lazy('statuses')
-
-    def post(self, request, *args, **kwargs):
-        messages.success(request, 'Статус успешно удален')
-        return super().post(request, *args, **kwargs)
-
+    model = Status
+    success_url = reverse_lazy(URL_INDEX)
+    success_message = _('Status was deleted successfully')
+    protected_object_url = reverse_lazy(URL_INDEX)
+    protected_object_message = _(
+        'Cannot delete this status because they are being used'
+    )
+    extra_context = {
+        'title': _('Status deletion'),
+        'button_name': _('Yes, delete')
+    }

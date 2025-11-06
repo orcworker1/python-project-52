@@ -1,11 +1,12 @@
-from django.shortcuts import render
 from django.urls import path
-from task_manager.labels.views import ViewLabels, CreateLabels , UpdateLabels, DeleteLabels
 
+from task_manager.labels import views
+
+app_name = 'labels'
 
 urlpatterns = [
-    path('', ViewLabels.as_view(), name='labels'),
-    path('create/', CreateLabels.as_view(), name='create_label'),
-    path('<int:pk>/update/', UpdateLabels.as_view(), name='update_label'),
-    path('<int:pk>/delete/', DeleteLabels.as_view(), name='delete_label'),
+    path('', views.LabelListView.as_view(), name='index'),
+    path('create/', views.LabelCreateView.as_view(), name='create'),
+    path('<int:pk>/update/', views.LabelUpdateView.as_view(), name='update'),
+    path('<int:pk>/delete/', views.LabelDeleteView.as_view(), name='delete'),
 ]

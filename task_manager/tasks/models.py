@@ -1,56 +1,55 @@
-from django.conf import settings
 from django.db import models
+from django.utils.translation import gettext_lazy as _
+
+from task_manager.labels.models import Label
 from task_manager.statuses.models import Status
-from django.contrib.auth.models import User
-from task_manager.labels.models import Labels
-import django_filters
+from task_manager.users.models import User
 
-"""""
-class Task(models.Model):
-    name = models.CharField(max_length=255, unique=True )
-    description = models.CharField(blank=True, max_length=300)
-    status = models.ForeignKey(Status, on_delete=models.PROTECT)
-    executor = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='executed_tasks')
-    author = models.ForeignKey(User, on_delete=models.PROTECT, related_name='created_task')
-    labels = models.ManyToManyField(Labels, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    class Meta:
-        ordering = ['id']
-    def __str__(self):
-        return self.name
-"""""
 
 class Task(models.Model):
-    name = models.CharField(max_length=150)
-    description = models.TextField(blank=True)
-    status = models.ForeignKey(Status, on_delete=models.PROTECT,
-                               related_name="tasks")
+    name = models.CharField(
+        max_length=255,
+        blank=False,
+        unique=True,
+        verbose_name=_('Name'),
+        error_messages={
+            'unique': _('This task with this name already exists. '
+                        'Please choose another name.'),
+        }
+    )
+    description = models.TextField(
+        blank=True,
+        verbose_name=_('Description'),
+    )
     author = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
+        User,
         on_delete=models.PROTECT,
-        related_name="created_tasks",
+        verbose_name=_('Author'),
+        related_name='author',
+    )
+    status = models.ForeignKey(
+        Status,
+        on_delete=models.PROTECT,
+        verbose_name=_('Status'),
     )
     executor = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.PROTECT,
-        null=True,
+        User,
         blank=True,
-        related_name="executed_tasks",
+        null=True,
+        on_delete=models.PROTECT,
+        verbose_name=_('Executor'),
+        related_name='executor',
+    )
+    labels = models.ManyToManyField(
+        Label,
+        blank=True,
+        verbose_name=_('Labels'),
     )
     created_at = models.DateTimeField(auto_now_add=True)
-    labels = models.ManyToManyField(Labels, related_name="labeled_tasks",
-                                    blank=True)
-
-    class Meta:
-        ordering = ["id"]
 
     def __str__(self):
         return self.name
 
-
-class TaskFilter(django_filters.Filter):
-    pass
-
-
-
-# Create your models here.
+    class Meta:
+        verbose_name = _('Task')
+        verbose_name_plural = _('Tasks')

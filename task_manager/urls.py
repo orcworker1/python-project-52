@@ -15,18 +15,19 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path , include
-from . import views
-from .users.views import UserLoginView, UserLogoutView, ViewUsers
+from django.urls import include, path
+from django.views.generic import TemplateView
+
+from task_manager.views import CustomLoginView, CustomLogoutView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.index, name='index'),
-    path('rollbar-test/', views.rollbar_test, name='rollbar_test'),
-    path('login/', UserLoginView.as_view(), name='login'),
-    path('logout/', UserLogoutView.as_view(), name='logout'),
-    path("users/", include("task_manager.users.urls", )),
-    path('statuses/',include("task_manager.statuses.urls",)),
-    path('tasks/',include("task_manager.tasks.urls",)),
-    path('labels/',include("task_manager.labels.urls",)),
+    path('i18n/', include('django.conf.urls.i18n')),
+    path('', TemplateView.as_view(template_name='index.html'), name='index'),
+    path('login/', CustomLoginView.as_view(), name='login'),
+    path('logout/', CustomLogoutView.as_view(), name='logout'),
+    path('users/', include('task_manager.users.urls')),
+    path('statuses/', include('task_manager.statuses.urls')),
+    path('labels/', include('task_manager.labels.urls')),
+    path('tasks/', include('task_manager.tasks.urls')),
 ]

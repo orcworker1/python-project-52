@@ -1,60 +1,74 @@
-from django.shortcuts import render
-from django.shortcuts import render
-from django.contrib.auth.models import User
-from django.contrib.auth.views import LoginView, LogoutView
-from django.contrib.auth.forms import UserCreationForm
-
+from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView , DetailView
-from .form import TaskForm
-from django.contrib import messages
-from task_manager.tasks.filtres import TaskFilter
+from django.utils.translation import gettext_lazy as _
+from django.views.generic import CreateView, DeleteView, DetailView, UpdateView
 from django_filters.views import FilterView
 
-
+from task_manager.mixins import AuthorPermissionMixin, CustomLoginRequiredMixin
+from task_manager.tasks.filters import TaskFilter
+from task_manager.tasks.forms import TaskCreationForm
 from task_manager.tasks.models import Task
 
-class ViewTasks(FilterView):
+URL_INDEX = 'tasks:tasks'
+
+
+class TaskListView(CustomLoginRequiredMixin, FilterView):
     model = Task
     template_name = 'tasks/tasks.html'
-    context_object_name = 'tasks'
     filterset_class = TaskFilter
+    context_object_name = 'tasks'
+    ordering = 'id'
 
-class CreateTask(CreateView):
+
+class TaskDetailView(CustomLoginRequiredMixin, DetailView):
+    model = Task
+    template_name = 'tasks/detail_view..html'
+    context_object_name = 'task'
+
+
+class TaskCreateView(CustomLoginRequiredMixin,
+                     SuccessMessageMixin,
+                     CreateView):
     model = Task
     template_name = 'tasks/create.html'
-    form_class = TaskForm
-    success_url = reverse_lazy('tasks')
+    form_class = TaskCreationForm
+    success_url = reverse_lazy(URL_INDEX)
+    success_message = _('Task was created successfully')
+    extra_context = {
+        'title': _('Create task'),
+        'button_name': _('Create')
+    }
 
     def form_valid(self, form):
         form.instance.author = self.request.user
-        messages.success(self.request, 'Задача успешно создана')
         return super().form_valid(form)
 
-class UpdateTask(UpdateView):
+
+class TaskUpdateView(CustomLoginRequiredMixin,
+                     SuccessMessageMixin,
+                     UpdateView):
     model = Task
     template_name = 'tasks/update.html'
-    form_class = TaskForm
-    success_url = reverse_lazy('tasks')
+    form_class = TaskCreationForm
+    success_url = reverse_lazy(URL_INDEX)
+    success_message = _('Task was updated successfully')
+    extra_context = {
+        'button_name': _('Update'),
+        'title': _('Update task')
+    }
 
-    def form_valid(self, form):
-        messages.success(self.request, 'Задача успешно изменена')
-        return super().form_valid(form)
 
-
-
-class DeleteTask(DeleteView):
+class TaskDeleteView(CustomLoginRequiredMixin,
+                     AuthorPermissionMixin,
+                     SuccessMessageMixin,
+                     DeleteView):
     model = Task
     template_name = 'tasks/delete.html'
-    success_url = reverse_lazy('tasks')
-
-    def post(self, request, *args, **kwargs):
-        messages.success(request, 'Задача успешно удалена')
-        return super().post(request, *args, **kwargs)
-
-
-class DetailViewTask(DetailView):
-    model = Task
-    template_name = 'tasks/detail_view.html'
-    context_object_name = 'task'
-# Create your views here.
+    success_url = reverse_lazy(URL_INDEX)
+    success_message = _('Task was deleted successfully')
+    permission_denied_url = reverse_lazy(URL_INDEX)
+    permission_denied_message = _("Only the task's author can delete it")
+    extra_context = {
+        'title': _('Task deletion'),
+        'button_name': _('Yes, delete')
+    }

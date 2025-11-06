@@ -1,132 +1,76 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
-from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.messages.views import SuccessMessageMixin
-from django.contrib.auth.forms import UserCreationForm
-from .form import CustomUserForm, CustomAuthenticationForm, CustomUserUpdateForm
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
-from django.contrib import messages
-from django.contrib.auth import update_session_auth_hash
-from django.http import HttpResponseRedirect
-from task_manager.tasks.models import Task
-from django.db import models
-from django.db.models import Exists, OuterRef, Q
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.contrib.auth import get_user_model
-from django.db.models.deletion import ProtectedError
-from django.db.models.deletion import ProtectedError
-from django.db import transaction
+from django.utils.translation import gettext_lazy as _
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    ListView,
+    UpdateView,
+)
+
+from task_manager.mixins import (
+    CustomLoginRequiredMixin,
+    ProtectErrorMixin,
+    UserPermissionMixin,
+)
+from task_manager.users.forms import (
+    CustomUserChangeForm,
+    CustomUserCreationForm,
+)
+from task_manager.users.models import User
+
+URL_INDEX = 'users:index'
+ERROR_MESSAGE_NO_RIGHTS = _("You don't have rights to change another user.")
 
 
-
-class OnlySelfMixin(UserPassesTestMixin):
-    def test_func(self):
-        obj = self.get_object()
-        return (self.request.user.is_authenticated and
-                obj.pk == self.request.user.pk)
-
-    def handle_no_permission(self):
-        if not self.request.user.is_authenticated:
-            messages.error(self.request,
-                           "Вы не авторизованы! Пожалуйста, войдите в систему")
-            return super().handle_no_permission()
-        messages.error(self.request,
-                       "У вас нет разрешения на изменение другого пользователя")
-        return redirect("users:list")
-
-
-
-
-class ViewUsers(ListView):
+class UserListView(ListView):
     model = User
-    template_name = 'users/users_list.html'
+    template_name = 'users/index.html'
     context_object_name = 'users'
-
-    def get_queryset(self):
-        qs = super().get_queryset()
-        has_tasks = Task.objects.filter(
-            Q(author=OuterRef('pk')) | Q(executor=OuterRef('pk'))
-        )
-        return qs.annotate(in_use=Exists(has_tasks))
+    ordering = ['id']
 
 
-class CreateUser(CreateView):
+class BaseUserView(SuccessMessageMixin):
     model = User
-    template_name = 'users/create.html'
-    form_class = CustomUserForm
-    success_url = reverse_lazy('login')
-
-    def form_valid(self, form):
-        response = super().form_valid(form)
-        messages.success(self.request, 'Пользователь успешно зарегистрирован')
-        return response
+    template_name = 'users/registration_form.html'
+    context_object_name = 'user'
+    permission_denied_url = reverse_lazy('users:index')
 
 
-class UserLoginView(LoginView):
-    template_name = 'users/login.html'
-    redirect_authenticated_user = True
-    form_class = CustomAuthenticationForm
-
-    def get_success_url(self):
-        return reverse_lazy('index')
-
-    def form_valid(self, form):
-        messages.success(self.request, 'Вы залогинены')
-        return super().form_valid(form)
+class UserCreateView(BaseUserView, CreateView):
+    form_class = CustomUserCreationForm
+    success_url = reverse_lazy("login")
+    success_message = _('User was registered successfully')
+    extra_context = {
+        'title': _('Sign Up'),
+        'button_name': _('Register')
+    }
 
 
-class UserLogoutView(LogoutView):
-    http_method_names = ['get', 'post']
-
-    def get(self, request, *args, **kwargs):
-        messages.info(request, 'Вы разлогинены')
-        return super().post(request, *args, **kwargs)
-
-    def get_success_url(self):
-        return reverse_lazy('index')
-
-
-class UserDelete(DeleteView):
-    model = User
-    template_name = 'users/delete_user.html'
-    success_url = reverse_lazy('users')
-
-    def _in_use(self) -> bool:
-        uid = self.object.pk
-        return Task.objects.filter(models.Q(author_id=uid) | models.Q(executor_id=uid)).exists()
-
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        if self._in_use(self.object):
-            messages.error(request, "Невозможно удалить пользователя, потому что он используется")
-            return HttpResponseRedirect(self.get_success_url())
-        return super().get(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        success_url = self.get_success_url()
-        try:
-            self.object.delete()
-            messages.success(request, "Пользователь успешно удален")
-        except ProtectedError:
-            messages.error(request, "Невозможно удалить пользователя, потому что он используется")
-        return HttpResponseRedirect(success_url)
+class UserUpdateView(CustomLoginRequiredMixin, UserPermissionMixin,
+                     BaseUserView, UpdateView):
+    form_class = CustomUserChangeForm
+    success_url = reverse_lazy(URL_INDEX)
+    success_message = _('User was updated successfully')
+    permission_denied_message = ERROR_MESSAGE_NO_RIGHTS
+    extra_context = {
+        'title': _('Edit profile'),
+        'button_name': _('Save changes')
+    }
 
 
-
-
-
-
-class UserUpdate(UpdateView):
-    model = User
-    template_name = 'users/update_user.html'
-    form_class = CustomUserUpdateForm
-    success_url = reverse_lazy('users')
-
-    def form_valid(self, form):
-        response = super().form_valid(form)
-        if form.cleaned_data.get('password1'):
-            update_session_auth_hash(self.request, self.object)
-        messages.success(self.request, 'Пользователь успешно изменен')
-        return response
+class UserDeleteView(CustomLoginRequiredMixin, UserPermissionMixin,
+                     ProtectErrorMixin, BaseUserView, DeleteView):
+    template_name = 'users/user_delete.html'
+    success_url = reverse_lazy(URL_INDEX)
+    success_message = _('User was deleted successfully')
+    permission_denied_message = ERROR_MESSAGE_NO_RIGHTS
+    access_denied_message = ERROR_MESSAGE_NO_RIGHTS
+    protected_object_url = reverse_lazy(URL_INDEX)
+    protected_object_message = _(
+        'Cannot delete this user because they are being used'
+    )
+    extra_context = {
+        'title': _('User deletion'),
+        'button_name': _('Yes, delete')
+    }

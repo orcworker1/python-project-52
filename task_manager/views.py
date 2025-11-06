@@ -1,20 +1,22 @@
-from django.shortcuts import render
-from django.http import HttpResponse
-import rollbar
+from django.contrib import messages
+from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.messages.views import SuccessMessageMixin
+from django.urls import reverse_lazy
+from django.utils.translation import gettext_lazy as _
 
-def index(request):
-    return render(
-        request,
-        "index.html",
-    )
+from task_manager.forms import CustomLoginForm
 
 
+class CustomLoginView(SuccessMessageMixin, LoginView):
+    template_name = 'users/login.html'
+    form_class = CustomLoginForm
+    next_page = reverse_lazy('index')
+    success_message = _('You were logged in')
 
-def rollbar_test(request):
-    try:
-        a = None
-        a.hello()
-    except Exception:
-        rollbar.report_exc_info()
-        raise
 
+class CustomLogoutView(SuccessMessageMixin, LogoutView):
+    next_page = reverse_lazy('index')
+
+    def dispatch(self, request, *args, **kwargs):
+        messages.info(request, _('You were logged out'))
+        return super().dispatch(request, *args, **kwargs)
