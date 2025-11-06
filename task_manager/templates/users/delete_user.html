@@ -18,7 +18,7 @@
             {% csrf_token %}
             <div class="d-grid gap-2">
               <button type="submit" class="btn btn-danger">Да, удалить</button>
-              <a href="{% url 'users' %}" class="btn btn-primary w-100">Отмена</a>
+              <a href="{% url 'users:index' %}" class="btn btn-primary w-100">Отмена</a>
             </div>
           </form>
         </div>

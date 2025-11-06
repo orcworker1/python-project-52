@@ -5,7 +5,7 @@
 
 <h1>Задачи</h1>
 
-<a class="btn btn-primary w-10 mt-3 mb-3" href="{% url 'create_task' %}">Создать задачу</a>
+<a class="btn btn-primary w-10 mt-3 mb-3" href="{% url 'tasks:create' %}">Создать задачу</a>
 
 <div class="card mb-4">
   <div class="card-body">
@@ -28,7 +28,7 @@
 
         <div class="col-md-3 d-flex align-items-end">
           <div class="form-check">
-            {{ filter.form.self_tasks }}
+            {{ filter.form.user_own_tasks }}
             <label class="form-check-label" for="{{ filter.form.self_tasks.id_for_label }}">
               Только свои задачи
             </label>
@@ -67,8 +67,8 @@
       <td>{{ task.executor|default:"—" }}</td>
       <td>{{ task.created_at|date:"d.m.Y H:i" }}</td>
       <td>
-          <a class="btn btn-primary btn-sm" href="{% url 'delete_task' task.id %}" role="button">Удалить</a>
-          <a class="btn btn-primary btn-sm" href="{% url 'update_task' task.id %}" role="button">Изменить</a>
+          <a class="btn btn-primary btn-sm" href="{% url 'tasks:delete' task.id %}" role="button">Удалить</a>
+          <a class="btn btn-primary btn-sm" href="{% url 'tasks:update' task.id %}" role="button">Изменить</a>
       </td>
     </tr>
     {% endfor %}

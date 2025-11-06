@@ -34,9 +34,9 @@
             {% if user.in_use %}
             <button class="btn btn-primary" disabled title="Невозможно удалить, пользователь в использовании">Удалить</button>
            {% else %}
-            <a class="btn btn-primary" href="{% url 'delete_user' user.pk %}">Удалить</a>
+            <a class="btn btn-primary" href="{% url 'users:delete' user.pk %}">Удалить</a>
            {% endif %}
-            <a class="btn btn-primary" href="{% url 'update_user' user.id %}" role="button">Изменить</a>
+            <a class="btn btn-primary" href="{% url 'users:update' user.id %}" role="button">Изменить</a>
         </td>
     </tr>
     {% endfor %}

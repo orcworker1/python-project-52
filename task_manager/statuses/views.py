@@ -20,7 +20,7 @@ URL_INDEX = 'statuses:index'
 
 class StatusListView(CustomLoginRequiredMixin, ListView):
     model = Status
-    template_name = 'statuses/index.html'
+    template_name = 'statuses/status.html'
     context_object_name = 'statuses'
     ordering = ['id']
 
@@ -29,7 +29,7 @@ class StatusCreateView(CustomLoginRequiredMixin,
                        SuccessMessageMixin,
                        CreateView):
     model = Status
-    template_name = 'statuses/status_form.html'
+    template_name = 'statuses/created.html'
     form_class = StatusCreationForm
     success_url = reverse_lazy(URL_INDEX)
     success_message = _('Status was created successfully')
@@ -44,7 +44,7 @@ class StatusUpdateView(CustomLoginRequiredMixin,
                        UpdateView):
     form_class = StatusCreationForm
     model = Status
-    template_name = 'statuses/status_form.html'
+    template_name = 'statuses/update.html'
     success_url = reverse_lazy(URL_INDEX)
     success_message = _('Status was updated successfully')
     extra_context = {
@@ -57,7 +57,7 @@ class StatusDeleteView(CustomLoginRequiredMixin,
                        SuccessMessageMixin,
                        ProtectErrorMixin,
                        DeleteView):
-    template_name = 'statuses/status_delete.html'
+    template_name = 'statuses/delete.html'
     model = Status
     success_url = reverse_lazy(URL_INDEX)
     success_message = _('Status was deleted successfully')

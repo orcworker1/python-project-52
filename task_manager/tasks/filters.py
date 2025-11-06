@@ -2,7 +2,7 @@ import django_filters
 from django.forms.widgets import CheckboxInput
 from django.utils.translation import gettext_lazy as _
 
-from task_manager.labels.models import Label
+from task_manager.labels.models import Labels
 from task_manager.tasks.models import Task
 
 
@@ -14,7 +14,7 @@ class TaskFilter(django_filters.FilterSet):
     )
 
     labels = django_filters.ModelChoiceFilter(
-        queryset=Label.objects.all(),
+        queryset=Labels.objects.all(),
         label=_('Label'))
 
     class Meta:

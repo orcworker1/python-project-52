@@ -4,7 +4,7 @@
 
 <h1>Метки</h1>
 
-<a class="btn btn-primary w-10 mt-3" href="{% url 'create_label' %}">Создать метку</a>
+<a class="btn btn-primary w-10 mt-3" href="{% url 'labels:create' %}">Создать метку<a/>
 
 <table class="table table-striped mt-3">
     <thead>
@@ -22,8 +22,8 @@
         <td>{{label.name}}</td>
         <td>{{label.created_at}}</td>
         <td class="">
-            <a class="btn btn-primary" href="{% url 'delete_label' label.id %}" role="button">Удалить</a>
-            <a class="btn btn-primary" href="{% url 'update_label' label.id %}" role="button">Изменить</a>
+            <a class="btn btn-primary" href="{% url 'labels:delete' label.id %}" role="button">Удалить</a>
+            <a class="btn btn-primary" href="{% url 'labels:update' label.id %}" role="button">Изменить</a>
         </td>
     </tr>
     {% endfor %}

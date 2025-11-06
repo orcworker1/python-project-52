@@ -51,8 +51,8 @@
           </table>
 
           <div class="d-flex justify-content-between mt-4">
-            <a href="{% url 'update_task' task.id %}" class="btn btn-primary w-50 me-2">Изменить</a>
-            <a href="{% url 'delete_task' task.id %}" class="btn btn-danger w-50">Удалить</a>
+            <a href="{% url 'tasks:update' task.id %}" class="btn btn-primary w-50 me-2">Изменить</a>
+            <a href="{% url 'tasks:delete' task.id %}" class="btn btn-danger w-50">Удалить</a>
           </div>
 
         </div>

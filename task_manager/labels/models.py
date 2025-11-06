@@ -3,7 +3,7 @@ from django.db.models.deletion import ProtectedError
 from django.utils.translation import gettext_lazy as _
 
 
-class Label(models.Model):
+class Labels(models.Model):
     name = models.CharField(
         max_length=255,
         blank=False,

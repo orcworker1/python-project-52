@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib import admin
 
-from .models import Label
+from .models import Labels
 
 
 class LabelAdmin(admin.ModelAdmin):
@@ -10,5 +10,5 @@ class LabelAdmin(admin.ModelAdmin):
     list_filter = ['created_at']
 
 
-admin.site.register(Label, LabelAdmin)
+admin.site.register(Labels, LabelAdmin)
 # Register your models here.

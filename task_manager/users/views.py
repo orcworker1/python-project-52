@@ -25,14 +25,14 @@ ERROR_MESSAGE_NO_RIGHTS = _("You don't have rights to change another user.")
 
 class UserListView(ListView):
     model = User
-    template_name = 'users/index.html'
+    template_name = 'users/users_list.html'
     context_object_name = 'users'
     ordering = ['id']
 
 
 class BaseUserView(SuccessMessageMixin):
     model = User
-    template_name = 'users/registration_form.html'
+    template_name = 'users/create.html'
     context_object_name = 'user'
     permission_denied_url = reverse_lazy('users:index')
 
@@ -61,7 +61,7 @@ class UserUpdateView(CustomLoginRequiredMixin, UserPermissionMixin,
 
 class UserDeleteView(CustomLoginRequiredMixin, UserPermissionMixin,
                      ProtectErrorMixin, BaseUserView, DeleteView):
-    template_name = 'users/user_delete.html'
+    template_name = 'users/delete_user.html'
     success_url = reverse_lazy(URL_INDEX)
     success_message = _('User was deleted successfully')
     permission_denied_message = ERROR_MESSAGE_NO_RIGHTS
