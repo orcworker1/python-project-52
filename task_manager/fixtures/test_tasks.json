@@ -1,0 +1,26 @@
+[
+    {
+      "model": "tasks.task",
+      "pk": 1,
+      "fields": {
+        "name": "fix template",
+        "description": "need fixed templates",
+        "status": 1,
+        "author": 2,
+        "executor": 1,
+        "created_at": "2025-01-01T00:00:00Z"
+      }
+    },
+    {
+      "model": "tasks.task",
+      "pk": 2,
+      "fields": {
+        "name": "just do it",
+        "description": "man just do it",
+        "status": 1,
+        "author": 1,
+        "executor": 2,
+        "created_at": "2025-01-01T00:00:00Z"
+      }
+    }
+  ]

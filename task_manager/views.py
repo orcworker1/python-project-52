@@ -14,7 +14,7 @@ class CustomLoginView(SuccessMessageMixin, LoginView):
     success_message = _('You were logged in')
 
 
-class CustomLogoutView(SuccessMessageMixin, LogoutView):
+class CustomLogoutView(LogoutView):
     next_page = reverse_lazy('index')
 
     def dispatch(self, request, *args, **kwargs):
