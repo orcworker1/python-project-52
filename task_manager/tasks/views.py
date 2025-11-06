@@ -9,12 +9,12 @@ from task_manager.tasks.filters import TaskFilter
 from task_manager.tasks.forms import TaskCreationForm
 from task_manager.tasks.models import Task
 
-URL_INDEX = 'tasks:tasks'
+URL_INDEX = 'tasks:index'
 
 
 class TaskListView(CustomLoginRequiredMixin, FilterView):
     model = Task
-    template_name = 'tasks/tasks.html'
+    template_name = 'tasks/index.html'
     filterset_class = TaskFilter
     context_object_name = 'tasks'
     ordering = 'id'
@@ -22,7 +22,7 @@ class TaskListView(CustomLoginRequiredMixin, FilterView):
 
 class TaskDetailView(CustomLoginRequiredMixin, DetailView):
     model = Task
-    template_name = 'tasks/detail_view..html'
+    template_name = 'tasks/detail.html'
     context_object_name = 'task'
 
 
@@ -30,7 +30,7 @@ class TaskCreateView(CustomLoginRequiredMixin,
                      SuccessMessageMixin,
                      CreateView):
     model = Task
-    template_name = 'tasks/create.html'
+    template_name = 'tasks/task_form.html'
     form_class = TaskCreationForm
     success_url = reverse_lazy(URL_INDEX)
     success_message = _('Task was created successfully')
@@ -48,7 +48,7 @@ class TaskUpdateView(CustomLoginRequiredMixin,
                      SuccessMessageMixin,
                      UpdateView):
     model = Task
-    template_name = 'tasks/update.html'
+    template_name = 'tasks/task_form.html'
     form_class = TaskCreationForm
     success_url = reverse_lazy(URL_INDEX)
     success_message = _('Task was updated successfully')
