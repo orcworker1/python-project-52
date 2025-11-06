@@ -8,7 +8,7 @@ class TestUserListView(UserTestCase):
     def test_user_list(self):
         response = self.client.get(reverse_lazy('users:index'))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'users/index.html')
+        self.assertTemplateUsed(response, 'users/users_list.html')
         self.assertEqual(User.objects.count(), self.user_count)
 
 
@@ -21,7 +21,7 @@ class TestUserCreateView(UserTestCase):
     def test_get_create_form(self):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'users/registration_form.html')
+        self.assertTemplateUsed(response, 'users/create.html')
 
     def test_user_creation(self):
         initial_count = User.objects.count()
@@ -55,7 +55,7 @@ class TestUserDeleteView(UserTestCase):
             'users:delete', kwargs={'pk': user1.id})
         )
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'users/user_delete.html')
+        self.assertTemplateUsed(response, 'users/delete_user.html')
 
         response = self.client.post(reverse_lazy(
             'users:delete', kwargs={'pk': user1.id})
@@ -118,7 +118,7 @@ class TestUserUpdateView(UserTestCase):
             'users:update', kwargs={'pk': user1.id}
         ))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'users/registration_form.html')
+        self.assertTemplateUsed(response, 'users/update.html')
 
         response = self.client.post(
             reverse_lazy('users:update', kwargs={'pk': user1.id}),

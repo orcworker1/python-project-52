@@ -103,7 +103,6 @@ DATABASES = {
     }
 }
 
-# Если CI не запущен — пробуем подключить PostgreSQL из DATABASE_URL
 if os.getenv('CI') != 'true':
     db_from_env = dj_database_url.config(conn_max_age=600)
     if db_from_env:

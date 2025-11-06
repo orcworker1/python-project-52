@@ -28,5 +28,5 @@ class Labels(models.Model):
         return self.name
 
     class Meta:
-        verbose_name = _('Label')
+        verbose_name = _('Labels')
         verbose_name_plural = _('Labels')

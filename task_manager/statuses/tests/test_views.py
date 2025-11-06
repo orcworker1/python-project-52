@@ -12,7 +12,7 @@ class TestStatusListView(StatusTestCase):
         response = self.client.get(reverse_lazy('statuses:index'))
 
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'statuses/index.html')
+        self.assertTemplateUsed(response, 'statuses/status.html')
         self.assertEqual(Status.objects.count(), self.status_count)
 
     def test_statuses_list_unauthorized(self):
@@ -31,7 +31,7 @@ class TestStatusCreateView(StatusTestCase):
 
         response = self.client.get(reverse_lazy('statuses:create'))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'statuses/status_form.html')
+        self.assertTemplateUsed(response, 'statuses/created.html')
 
         response = self.client.post(
             reverse_lazy('statuses:create'),
@@ -68,7 +68,7 @@ class TestStatusUpdateView(StatusTestCase):
             reverse_lazy('statuses:update', kwargs={'pk': status.id})
         )
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'statuses/status_form.html')
+        self.assertTemplateUsed(response, 'statuses/update.html')
 
         response = self.client.post(
             reverse_lazy('statuses:update', kwargs={'pk': status.id}),
@@ -110,7 +110,7 @@ class TestStatusDeleteView(StatusTestCase):
             reverse_lazy('statuses:delete', kwargs={'pk': status.id})
         )
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'statuses/status_delete.html')
+        self.assertTemplateUsed(response, 'statuses/delete.html')
 
         response = self.client.post(
             reverse_lazy('statuses:delete', kwargs={'pk': status.id})

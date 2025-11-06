@@ -25,7 +25,7 @@ class TestCustomUserCreationForm(UserTestCase):
             {'username': self.valid_user_data['username']},
             {
                 'username': self.valid_user_data['username'],
-                'password1': 'test123',  # NOSONAR
+                'password1': 'test123',
             },
             {'first_name': 'Test', 'last_name': 'User'},
         ]
@@ -38,8 +38,8 @@ class TestCustomUserCreationForm(UserTestCase):
     def test_password_too_short(self):
         invalid_data = self.valid_user_data.copy()
         invalid_data.update({
-            'password1': '12',  # NOSONAR
-            'password2': '12'   # NOSONAR
+            'password1': '12',
+            'password2': '12'
         })
         form = CustomUserCreationForm(data=invalid_data)
         self.assertFalse(form.is_valid())
@@ -61,7 +61,7 @@ class TestCustomUserCreationForm(UserTestCase):
                 self.assertIn('username', form.errors)
 
     def test_passwords_do_not_match(self):
-        form = self.get_form({'password2': 'Different123'})  # NOSONAR
+        form = self.get_form({'password2': 'Different123'})
         self.assertFalse(form.is_valid())
         self.assertIn('password2', form.errors)
 
@@ -98,18 +98,18 @@ class TestCustomUserChangeForm(UserTestCase):
         user = form.save()
         self.assertEqual(user.username, self.update_user_data['username'])
         self.assertTrue(user.check_password(
-            self.update_user_data['password1']  # NOSONAR
+            self.update_user_data['password1']
         ))
 
     def test_passwords_do_not_match(self):
-        form = self.get_form({'password2': 'WrongConfirm'})  # NOSONAR
+        form = self.get_form({'password2': 'WrongConfirm'})
         self.assertFalse(form.is_valid())
         self.assertIn('password2', form.errors)
 
     def test_short_password(self):
         form = self.get_form({
-            'password1': '12',  # NOSONAR
-            'password2': '12'   # NOSONAR
+            'password1': '12',
+            'password2': '12'
         })
         self.assertFalse(form.is_valid())
         self.assertIn('password2', form.errors)
@@ -128,8 +128,8 @@ class TestCustomUserChangeForm(UserTestCase):
 
     def test_update_with_existing_valid_password(self):
         form = self.get_form({
-            'password1': 'QueenInNorth456',  # NOSONAR
-            'password2': 'QueenInNorth456',  # NOSONAR
+            'password1': 'QueenInNorth456',
+            'password2': 'QueenInNorth456',  #
         })
         self.assertTrue(form.is_valid())
         user = form.save()

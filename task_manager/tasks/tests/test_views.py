@@ -15,7 +15,7 @@ class TestTaskListView(TaskTestCase):
         response = self.client.get(reverse_lazy('tasks:index'))
 
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'tasks/index.html')
+        self.assertTemplateUsed(response, 'tasks/tasks.html')
         self.assertEqual(Task.objects.count(), self.task_count)
 
 
@@ -80,7 +80,7 @@ class TestTaskDetailView(TaskTestCase):
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'tasks/detail.html')
+        self.assertTemplateUsed(response, 'tasks/detail_view.html')
         self.assertEqual(response.context['task'], self.task1)
 
     def test_404_for_nonexistent_task(self):
@@ -109,7 +109,7 @@ class TestTaskCreateView(TaskTestCase):
 
         response = self.client.get(reverse_lazy('tasks:create'))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'tasks/task_form.html')
+        self.assertTemplateUsed(response, 'tasks/create.html')
 
         response = self.client.post(
             reverse_lazy('tasks:create'),
@@ -143,7 +143,7 @@ class TestTaskUpdateView(TaskTestCase):
             reverse_lazy('tasks:update', kwargs={'pk': self.task1.id})
         )
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'tasks/task_form.html')
+        self.assertTemplateUsed(response, 'tasks/update.html')
 
         response = self.client.post(
             reverse_lazy('tasks:update', kwargs={'pk': self.task1.id}),
@@ -165,7 +165,7 @@ class TestTaskUpdateView(TaskTestCase):
             reverse_lazy('tasks:update', kwargs={'pk': task.id})
         )
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'tasks/task_form.html')
+        self.assertTemplateUsed(response, 'tasks/update.html')
 
         response = self.client.post(
             reverse_lazy('tasks:update', kwargs={'pk': task.id}),
