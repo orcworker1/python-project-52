@@ -27,9 +27,9 @@ class TestLabelCreateView(LabelTestCase):
         self.client.force_login(user1)
         initial_count = Labels.objects.count()
 
-        response = self.client.get(reverse_lazy('labels:create'))
+        response = self.client.get(reverse_lazy('labels:created'))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'labels/create.html')
+        self.assertTemplateUsed(response, 'labels/created.html')
 
         response = self.client.post(
             reverse_lazy('labels:create'),

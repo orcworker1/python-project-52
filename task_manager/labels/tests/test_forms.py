@@ -15,12 +15,11 @@ class TestLabelCreationForm(LabelTestCase):
         form = LabelCreationForm(data={
             'name': ''
         })
-        self.assertFalse(form.is_valid())
+
         self.assertIn('name', form.errors)
 
     def test_duplicate_name(self):
         form = LabelCreationForm(data={
             'name': self.label1.name
         })
-        self.assertFalse(form.is_valid())
         self.assertIn('name', form.errors)

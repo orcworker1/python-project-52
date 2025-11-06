@@ -29,7 +29,7 @@ class StatusCreateView(CustomLoginRequiredMixin,
                        SuccessMessageMixin,
                        CreateView):
     model = Status
-    template_name = 'statuses/create.html'
+    template_name = 'statuses/created.html'
     form_class = StatusCreationForm
     success_url = reverse_lazy(URL_INDEX)
     success_message = _('Status was created successfully')

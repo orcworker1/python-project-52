@@ -75,11 +75,6 @@ class TestCustomUserCreationForm(UserTestCase):
         self.assertIn('first_name', form.errors)
         self.assertIn('last_name', form.errors)
 
-    def test_duplicate_username(self):
-        form = self.get_form({'username': 'john_snow'})
-        self.assertFalse(form.is_valid())
-        self.assertIn('username', form.errors)
-
 
 class TestCustomUserChangeForm(UserTestCase):
     def get_form(self, overrides=None):

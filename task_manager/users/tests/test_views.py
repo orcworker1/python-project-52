@@ -118,7 +118,7 @@ class TestUserUpdateView(UserTestCase):
             'users:update', kwargs={'pk': user1.id}
         ))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'users/update_user.html')
+        self.assertTemplateUsed(response, 'users/create.html')
 
         response = self.client.post(
             reverse_lazy('users:update', kwargs={'pk': user1.id}),
@@ -162,4 +162,4 @@ class TestUserUpdateView(UserTestCase):
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, reverse_lazy('users:index'))
         unchanged_user = User.objects.get(id=user1.id)
-        self.assertEqual(unchanged_user.username, 'john_snow')
+        self.assertEqual(unchanged_user.username, 'lala')

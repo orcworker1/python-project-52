@@ -31,6 +31,13 @@ class CustomUserCreationForm(FormStyleMixin, UserCreationForm):
                 _('Please enter your password again to confirm.'),
         }
 
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if User.objects.filter(username=username).exists():
+            raise forms.ValidationError(
+                _('A user with that username already exists.')
+            )
+        return username
     def clean(self):
         """Ensure passwords match and meet requirements."""
         cleaned_data = super().clean()
@@ -107,3 +114,4 @@ class CustomUserChangeForm(FormStyleMixin, forms.ModelForm):
         if commit:
             user.save()
         return user
+
