@@ -22,3 +22,9 @@ shell:
 test:
 	uv run python manage.py test
 
+lint:
+	uv run ruff check task_manager
+
+check:
+	test lint
+
