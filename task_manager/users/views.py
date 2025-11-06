@@ -53,6 +53,7 @@ class UserUpdateView(CustomLoginRequiredMixin, UserPermissionMixin,
     success_url = reverse_lazy(URL_INDEX)
     success_message = _('User was updated successfully')
     permission_denied_message = ERROR_MESSAGE_NO_RIGHTS
+    template_name = 'users/update_user.html'
     extra_context = {
         'title': _('Edit profile'),
         'button_name': _('Save changes')
