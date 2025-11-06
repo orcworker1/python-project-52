@@ -38,6 +38,7 @@ class CustomUserCreationForm(FormStyleMixin, UserCreationForm):
                 _('A user with that username already exists.')
             )
         return username
+
     def clean(self):
         """Ensure passwords match and meet requirements."""
         cleaned_data = super().clean()
