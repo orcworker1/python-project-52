@@ -118,7 +118,7 @@ class TestUserUpdateView(UserTestCase):
             'users:update', kwargs={'pk': user1.id}
         ))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'users/create.html')
+        self.assertTemplateUsed(response, 'users/update_user.html')
 
         response = self.client.post(
             reverse_lazy('users:update', kwargs={'pk': user1.id}),
