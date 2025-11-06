@@ -1,6 +1,6 @@
 from django.test import Client, TestCase
 
-from task_manager.labels.models import Label
+from task_manager.labels.models import Labels
 from task_manager.statuses.models import Status
 from task_manager.tasks.models import Task
 from task_manager.users.models import User
@@ -20,8 +20,8 @@ class TaskTestCase(TestCase):
 
         self.status1 = Status.objects.get(pk=1)
 
-        self.label1 = Label.objects.get(pk=1)
-        self.label2 = Label.objects.get(pk=2)
+        self.label1 = Labels.objects.get(pk=1)
+        self.label2 = Labels.objects.get(pk=2)
 
         self.task1 = Task.objects.get(pk=1)
         self.task2 = Task.objects.get(pk=2)

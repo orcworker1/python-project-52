@@ -1,6 +1,6 @@
 [
     {
-      "model": "labels.label",
+      "model": "labels.labels",
       "pk": 1,
       "fields": {
         "name": "bug",
@@ -8,7 +8,7 @@
       }
     },
     {
-      "model": "labels.label",
+      "model": "labels.labels",
       "pk": 2,
       "fields": {
         "name": "flex",
