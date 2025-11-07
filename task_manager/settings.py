@@ -56,7 +56,6 @@ INSTALLED_APPS = [
     'task_manager.statuses',
     'task_manager.labels',
     'task_manager.tasks',
-    'rollbar.contrib.django.middleware.RollbarNotifierMiddleware',
 ]
 
 
