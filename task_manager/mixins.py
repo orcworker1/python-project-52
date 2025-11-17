@@ -7,7 +7,6 @@ from django.utils.translation import gettext_lazy as _
 
 
 class FormStyleMixin:
-    """Adds Bootstrap styles to form fields."""
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -35,7 +34,6 @@ class FormStyleMixin:
 
 
 class CustomLoginRequiredMixin(LoginRequiredMixin):
-    """Redirects unauthorized users without showing extra messages."""
     login_url = reverse_lazy('login')
     redirect_field_name = None
 
@@ -47,7 +45,6 @@ class CustomLoginRequiredMixin(LoginRequiredMixin):
 
 
 class BasePermissionMixin(UserPassesTestMixin):
-    """Base mixin for object permission checks."""
     permission_denied_url = reverse_lazy('users:index')
     permission_denied_message = _('Permission denied')
     redirect_field_name = None
@@ -60,7 +57,6 @@ class BasePermissionMixin(UserPassesTestMixin):
 
 
 class UserPermissionMixin(BasePermissionMixin):
-    """Allows access only to the profile owner."""
     msg = _('You do not have permission to change another user.')
     permission_denied_message = msg
 
@@ -69,7 +65,6 @@ class UserPermissionMixin(BasePermissionMixin):
 
 
 class AuthorPermissionMixin(BasePermissionMixin):
-    """Allows access only to the object author."""
     msg = _('You do not have permission to change this object.')
     permission_denied_message = msg
 
@@ -78,7 +73,6 @@ class AuthorPermissionMixin(BasePermissionMixin):
 
 
 class ProtectErrorMixin:
-    """Handles ProtectedError exceptions on object deletion."""
     protected_object_message = _(
         'Cannot delete object because it is being used.'
     )
